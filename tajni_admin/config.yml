@@ -23,14 +23,9 @@ collections:
       - { label: "Datum i vrijeme", name: "date", widget: "datetime" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
       - { label: "Kolo", name: "round", widget: "number", default: 1 }
-      
-      # Polja za odigranu utakmicu
-      - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
-      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
-      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
 
-      # ZAPISNIK - Unos učinka za svakog igrača na meču
-      - label: "Sastav i učinak igrača"
+      # SASTAV IGRAČA (Dostupno ODMAH, i za utakmice koje nisu odigrane)
+      - label: "Sastav igrača za utakmicu"
         name: "player_stats"
         widget: "list"
         required: false
@@ -42,11 +37,16 @@ collections:
             search_fields: ["title"]
             value_field: "title"
             display_fields: ["title"]
-          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 }
+          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 0 }
           - { label: "Golovi", name: "goals", widget: "number", default: 0 }
           - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
+      
+      # Polja za odigranu utakmicu (Popunjava se NAKON meča)
+      - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
+      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
+      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
 
   # 2. KLUBOVI U LIGI
   - name: "klubovi"
@@ -59,7 +59,7 @@ collections:
       - { label: "Naziv kluba", name: "title", widget: "string" }
       - { label: "Grb kluba", name: "logo", widget: "image", required: false }
 
-  # 3. TABELA LIGE (Sada automatski vuče klubove iz sekcije Klubovi u ligi)
+  # 3. TABELA LIGE
   - name: "tabela"
     label: "Tabela Lige"
     folder: "sadrzaj/tabela"
