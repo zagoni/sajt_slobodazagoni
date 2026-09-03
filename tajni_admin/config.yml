@@ -1,0 +1,17 @@
+backend:
+  name: git-gateway
+  branch: main # Ako ti se glavna grana na GitHubu zove master, ovdje napiši master
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "stranice"
+    label: "Uređivanje Sajta"
+    files:
+      - file: "index.html"
+        label: "Početna Stranica"
+        name: "home"
+        fields:
+          - { label: "Glavni Naslov", name: "title", widget: "string" }
+          - { label: "Tekst Članka / Sajta", name: "body", widget: "markdown" }
