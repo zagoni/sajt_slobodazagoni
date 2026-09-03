@@ -1,17 +1,61 @@
 backend:
   name: git-gateway
-  branch: main # Ako ti se glavna grana na GitHubu zove master, ovdje napiši master
+  branch: main
 
-media_folder: "images"
-public_folder: "/images"
+media_folder: "slike"
+public_folder: "/slike"
 
 collections:
-  - name: "stranice"
-    label: "Uređivanje Sajta"
-    files:
-      - file: "index.html"
-        label: "Početna Stranica"
-        name: "home"
+  # SEKCIJA ZA VIJESTI
+  - name: "vijesti"
+    label: "Vijesti"
+    folder: "sadrzaj/vijesti"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Naslov", name: "title", widget: "string" }
+      - { label: "Datum objave", name: "date", widget: "datetime" }
+      - { label: "Glavna slika", name: "thumbnail", widget: "image" }
+      - { label: "Kratak opis (za početnu)", name: "summary", widget: "text" }
+      - { label: "Sadržaj vijesti", name: "body", widget: "markdown" }
+
+  # SEKCIJA ZA IZVJEŠTAJE SA UTAKMITA
+  - name: "utakmice"
+    label: "Izvještaji sa utakmica"
+    folder: "sadrzaj/utakmice"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Protivnik", name: "opponent", widget: "string" }
+      - { label: "Datum i vrijeme", name: "date", widget: "datetime" }
+      - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
+      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
+      - { label: "Izvještaj sa meča", name: "report", widget: "markdown" }
+      
+      # STATISTIKA UTAKMIČARA
+      - label: "Statistika igrača na meču"
+        name: "players_stats"
+        widget: "list"
         fields:
-          - { label: "Glavni Naslov", name: "title", widget: "string" }
-          - { label: "Tekst Članka / Sajta", name: "body", widget: "markdown" }
+          - { label: "Ime i prezime igrača", name: "player_name", widget: "string" }
+          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 }
+          - { label: "Golovi", name: "goals", widget: "number", default: 0 }
+          - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
+          - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
+          - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
+
+  # SEKCIJA ZA IGRAČE (PROFILI I ZBJIRNA STATISTIKA)
+  - name: "igraci"
+    label: "Igrači"
+    folder: "sadrzaj/igraci"
+    create: true
+    fields:
+      - { label: "Ime i prezime", name: "title", widget: "string" }
+      - { label: "Pozicija", name: "position", widget: "select", options: ["Golman", "Odbrana", "Vezni", "Napad"] }
+      - { label: "Fotografija", name: "photo", widget: "image" }
+      - { label: "Ukupno nastupa", name: "total_appearances", widget: "number", default: 0 }
+      - { label: "Ukupno minuta", name: "total_minutes", widget: "number", default: 0 }
+      - { label: "Ukupno golova", name: "total_goals", widget: "number", default: 0 }
+      - { label: "Ukupno asistencija", name: "total_assists", widget: "number", default: 0 }
+      - { label: "Ukupno žutih kartona", name: "total_yellow_cards", widget: "number", default: 0 }
+      - { label: "Ukupno crvenih kartona", name: "total_red_cards", widget: "number", default: 0 }
