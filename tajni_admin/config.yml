@@ -1,68 +1,22 @@
-backend:
-  name: git-gateway
-  branch: main
-
-media_folder: "slike"
-public_folder: "/slike"
-
-collections:
-  # 1. UTKMICE I RASPORED
-  - name: "utakmice"
-    label: "Utakmice i Izvještaji"
-    folder: "sadrzaj/utakmice"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Protivnik", name: "opponent", widget: "string" }
-      - { label: "Datum i vrijeme", name: "date", widget: "datetime" }
-      - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
-      - { label: "Kolo", name: "round", widget: "number", default: 1 }
-      
-      # Polja za odigranu utakmicu
-      - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
-      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
-      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
-
-      # LISTA IGRAČA KOJI SU IGRALI (Odabir iz postojeće baze igrača)
-      - label: "Sastav i učinak igrača"
-        name: "player_stats"
-        widget: "list"
-        required: false
-        fields:
-          - label: "Izaberi igrača"
-            name: "player"
-            widget: "relation"
-            collection: "igraci"
-            search_fields: ["title"]
-            value_field: "{{slug}}"
-            display_fields: ["title"]
-          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 }
-          - { label: "Golovi", name: "goals", widget: "number", default: 0 }
-          - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
-          - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
-          - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
-
-  # 2. VIJESTI
-  - name: "vijesti"
-    label: "Vijesti"
-    folder: "sadrzaj/vijesti"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Naslov", name: "title", widget: "string" }
-      - { label: "Datum", name: "date", widget: "datetime" }
-      - { label: "Slika", name: "image", widget: "image", required: false }
-      - { label: "Kratak opis", name: "summary", widget: "text" }
-      - { label: "Sadržaj", name: "body", widget: "markdown" }
-
-  # 3. IGRAČI (ROSTER)
+# IGRAČI (ROSTER I POČETNA/KORIGOVANA STATISTIKA)
   - name: "igraci"
     label: "Igrači"
     folder: "sadrzaj/igraci"
     create: true
     slug: "{{slug}}"
     fields:
+      # Osnovni podaci
       - { label: "Ime i prezime", name: "title", widget: "string" }
       - { label: "Broj dresa", name: "number", widget: "number" }
       - { label: "Pozicija", name: "position", widget: "select", options: ["Golman", "Odbrana", "Vezni", "Napad"] }
-      - { label: "Slika", name: "photo", widget: "image", required: false }
+      - { label: "Datum rođenja", name: "birth_date", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "U klubu od (godina ili datum)", name: "in_club_since", widget: "string", default: "2024" }
+      - { label: "Slika igrača", name: "photo", widget: "image", required: false }
+
+      # Korekcija / Početna statistika (prije unosa novih utakmica)
+      - { label: "Početni/Korigovani broj nastupa", name: "base_appearances", widget: "number", default: 0 }
+      - { label: "Početni/Korigovani minuti", name: "base_minutes", widget: "number", default: 0 }
+      - { label: "Početni/Korigovani golovi", name: "base_goals", widget: "number", default: 0 }
+      - { label: "Početne/Korigovane asistencije", name: "base_assists", widget: "number", default: 0 }
+      - { label: "Početni žuti kartoni", name: "base_yellow_cards", widget: "number", default: 0 }
+      - { label: "Početni crveni kartoni", name: "base_red_cards", widget: "number", default: 0 }
