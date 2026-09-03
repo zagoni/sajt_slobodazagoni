@@ -6,56 +6,56 @@ media_folder: "slike"
 public_folder: "/slike"
 
 collections:
-  # SEKCIJA ZA VIJESTI
-  - name: "vijesti"
-    label: "Vijesti"
-    folder: "sadrzaj/vijesti"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Naslov", name: "title", widget: "string" }
-      - { label: "Datum objave", name: "date", widget: "datetime" }
-      - { label: "Glavna slika", name: "thumbnail", widget: "image" }
-      - { label: "Kratak opis (za početnu)", name: "summary", widget: "text" }
-      - { label: "Sadržaj vijesti", name: "body", widget: "markdown" }
-
-  # SEKCIJA ZA IZVJEŠTAJE SA UTAKMITA
+  # 1. RASPORED I IZVJEŠTAJI SA UTAKMITA
   - name: "utakmice"
-    label: "Izvještaji sa utakmica"
+    label: "Raspored i Utakmice"
     folder: "sadrzaj/utakmice"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Protivnik", name: "opponent", widget: "string" }
       - { label: "Datum i vrijeme", name: "date", widget: "datetime" }
-      - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
-      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
-      - { label: "Izvještaj sa meča", name: "report", widget: "markdown" }
+      - { label: "Mjesto", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
+      - { label: "Kolo", name: "round", widget: "number", default: 1 }
       
-      # STATISTIKA UTAKMIČARA
-      - label: "Statistika igrača na meču"
-        name: "players_stats"
+      # Ako je utakmica odigrana, popunjava se ovo:
+      - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
+      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
+      - { label: "Poveži sa vijesti/izvještajem", name: "related_news", widget: "relation", collection: "vijesti", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], required: false }
+
+      # STATISTIKA IGRAČA ZA OVU UTAKMICU
+      - label: "Zapisnik / Statistika igrača"
+        name: "player_stats"
         widget: "list"
+        required: false
         fields:
-          - { label: "Ime i prezime igrača", name: "player_name", widget: "string" }
+          - { label: "Igrač", name: "player", widget: "relation", collection: "igraci", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"] }
           - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 }
           - { label: "Golovi", name: "goals", widget: "number", default: 0 }
           - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
-  # SEKCIJA ZA IGRAČE (PROFILI I ZBJIRNA STATISTIKA)
+  # 2. VIJESTI I IZVJEŠTAJI
+  - name: "vijesti"
+    label: "Vijesti i Izvještaji"
+    folder: "sadrzaj/vijesti"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Naslov", name: "title", widget: "string" }
+      - { label: "Datum", name: "date", widget: "datetime" }
+      - { label: "Glavna slika", name: "image", widget: "image", required: false }
+      - { label: "Sadržaj / Tekst izvještaja", name: "body", widget: "markdown" }
+
+  # 3. IGRAČI
   - name: "igraci"
-    label: "Igrači"
+    label: "Igrači (Kadar)"
     folder: "sadrzaj/igraci"
     create: true
+    slug: "{{slug}}"
     fields:
       - { label: "Ime i prezime", name: "title", widget: "string" }
+      - { label: "Broj dresa", name: "number", widget: "number" }
       - { label: "Pozicija", name: "position", widget: "select", options: ["Golman", "Odbrana", "Vezni", "Napad"] }
-      - { label: "Fotografija", name: "photo", widget: "image" }
-      - { label: "Ukupno nastupa", name: "total_appearances", widget: "number", default: 0 }
-      - { label: "Ukupno minuta", name: "total_minutes", widget: "number", default: 0 }
-      - { label: "Ukupno golova", name: "total_goals", widget: "number", default: 0 }
-      - { label: "Ukupno asistencija", name: "total_assists", widget: "number", default: 0 }
-      - { label: "Ukupno žutih kartona", name: "total_yellow_cards", widget: "number", default: 0 }
-      - { label: "Ukupno crvenih kartona", name: "total_red_cards", widget: "number", default: 0 }
+      - { label: "Slika", name: "photo", widget: "image", required: false }
