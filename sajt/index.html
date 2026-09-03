@@ -1,0 +1,4196 @@
+<!DOCTYPE html>
+<html lang="sr" class="loading">
+
+<head>
+
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="google-site-verification"
+    content="J7MB4WdWhUTWnxealOtvX2-twJajCb4s-4zkpILb5mU"
+>
+
+<title>FK Sloboda Donji Zagoni | Zvanična stranica kluba</title>
+
+<meta
+    name="description"
+    content="Zvanična web stranica FK Sloboda Donji Zagoni. Raspored, rezultati, tabela, vijesti, sastav, statistika i galerija."
+>
+
+<meta
+    name="keywords"
+    content="FK Sloboda Donji Zagoni, Sloboda Zagoni, Druga opštinska liga Bijeljine, fudbal Bijeljina, Jabanuša, FK Koridor, Sloga Dazdarevo, Balatun, Ostojićevo, Koviljuše, Budućnost Ravno Polje, Piperci, Sloga 94, Omladinac Čađavica, Polet Kojčinovac, Sava Gradac, Branko Babalj, Luka Stankić, Dejan Todorović, Darko Maksimović, Slaviša Stanojević, Miroslav Jović, Rajko Đorđić, Miloš Marković, Đorđe Jović, Dražen Petrović, Radislav Stevanović, Branimir Pantić, Darko Perić, Siniša Đokić, Marko Galić, Đoko Mićić, Pavle Todorović, Aleksandar Petrović, Milan Spasojević, Saša Spasojević, Rade Stevanović, Goran Stevanović, Rade Stankić, Mladen Jović, Žarko Rikanović, Bojan Makarić"
+>
+
+<meta
+    name="author"
+    content="FK Sloboda Donji Zagoni"
+>
+
+<meta
+    property="og:title"
+    content="FK Sloboda Donji Zagoni"
+>
+
+<meta
+    property="og:description"
+    content="Tabela, rezultati i vijesti FK Sloboda Donji Zagoni."
+>
+
+<meta
+    property="og:image"
+    content="grb.webp"
+>
+
+<meta
+    property="og:type"
+    content="website"
+>
+
+
+<style>
+
+/* =========================================================
+   OSNOVNO
+========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    padding:0;
+}
+
+html.loading,
+body.loading{
+    overflow:hidden;
+    height:100vh;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    color:#333;
+    text-align:center;
+}
+
+
+/* =========================================================
+   SPLASH
+========================================================= */
+
+#splash-screen{
+    position:fixed;
+    inset:0;
+    background:#003366;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+    transition:opacity .8s;
+}
+
+.splash-content{
+    text-align:center;
+    color:#fff;
+    max-width:400px;
+    padding:20px;
+}
+
+.splash-logo{
+    width:140px;
+    max-width:45%;
+    animation:pulse 1.5s infinite;
+    filter:drop-shadow(0 4px 8px #000);
+}
+
+.loader{
+    border:4px solid #f3f3f3;
+    border-top:4px solid #ffcc00;
+    border-radius:50%;
+    width:35px;
+    height:35px;
+    animation:spin 1s linear infinite;
+    margin:0 auto 15px;
+}
+
+.fade-out{
+    opacity:0;
+    pointer-events:none;
+}
+
+@keyframes pulse{
+    50%{
+        transform:scale(1.05);
+    }
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+    background-image:
+        linear-gradient(#0007,#0009),
+        url('majica.webp');
+
+    background-size:cover;
+    background-position:center;
+
+    color:#fff;
+
+    padding:50px 20px 40px;
+
+    box-shadow:inset 0 0 100px #0009;
+}
+
+.logo{
+    width:170px;
+    max-width:45%;
+    height:auto;
+
+    filter:drop-shadow(0 4px 8px #000);
+
+    cursor:pointer;
+}
+
+h1{
+    margin:10px 0 2px;
+    font-size:2.4em;
+    text-shadow:2px 2px 6px #000;
+}
+
+.league-title{
+    font-size:.95em;
+    font-weight:bold;
+    color:#ffcc00;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    text-shadow:1px 1px 4px #000;
+}
+
+
+/* =========================================================
+   NAVIGACIJA
+========================================================= */
+
+.nav-tabs{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+
+    background:#003366;
+
+    padding:10px;
+    gap:8px;
+
+    position:sticky;
+    top:0;
+
+    z-index:100;
+}
+
+.tab-btn{
+    background:#004488;
+    color:#fff;
+
+    border:1px solid #0055aa;
+
+    padding:10px 14px;
+
+    font-size:.95em;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    border-radius:5px;
+}
+
+.tab-btn:hover{
+    background:#0066cc;
+}
+
+.tab-btn.active{
+    background:#ffcc00;
+    color:#003366;
+    border-color:#ffcc00;
+}
+
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+.container{
+    max-width:1100px;
+    margin:20px auto;
+    padding:0 15px;
+}
+
+.tab-content{
+    display:none;
+
+    background:#fff;
+
+    padding:25px;
+
+    border-radius:8px;
+
+    box-shadow:0 2px 8px #0002;
+
+    margin-bottom:25px;
+}
+
+.tab-content.active{
+    display:block;
+}
+
+h2{
+    color:#004488;
+
+    border-bottom:2px solid #004488;
+
+    padding-bottom:8px;
+
+    margin-top:0;
+}
+
+h3{
+    color:#004488;
+}
+
+
+/* =========================================================
+   MATCH WIDGET
+========================================================= */
+.match-card {
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    text-align: left;
+}
+
+.match-card-header {
+    font-size: 13px;
+    color: #1e3a8a;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.match-teams-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.team-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 38%;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.team-block img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    margin-bottom: 6px;
+}
+
+.match-score-center {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: 1px;
+    width: 24%;
+    text-align: center;
+}
+
+.match-card-footer {
+    text-align: center;
+    font-size: 12px;
+    color: #475569;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+.match-btn {
+    width: 100%;
+    background-color: #004488;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+}
+/* =========================================================
+   PRETHODNI / SLEDEĆI
+========================================================= */
+
+.result-box{
+    background:#f8fbff;
+
+    border:2px solid #b3d1ff;
+
+    border-radius:8px;
+
+    padding:20px;
+
+    margin-bottom:25px;
+}
+
+.result-title{
+    color:#004488;
+
+    font-size:1.15em;
+
+    font-weight:bold;
+
+    margin-bottom:15px;
+}
+
+.result-teams{
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    font-weight:bold;
+
+    color:#003366;
+}
+
+.result-team{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+.result-logo{
+    width:45px;
+    height:45px;
+
+    object-fit:contain;
+}
+
+.result-score{
+    font-size:1.8em;
+    font-weight:bold;
+
+    color:#003366;
+
+    white-space:nowrap;
+}
+
+.result-link{
+    display:inline-block;
+
+    margin-top:15px;
+
+    background:#004488;
+
+    color:#fff;
+
+    padding:10px 16px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    text-decoration:none;
+}
+
+
+/* =========================================================
+   TABELA
+========================================================= */
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin-top:15px;
+    border-radius:7px;
+    background:#fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.league-table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+}
+/* Osigurava da je tekst u tabeli uvijek taman i vidljiv */
+.league-table td, .tabela-pocetna td {
+    color: #111111 !important;
+}
+
+/* Ako je naziv kluba u nekom linku unutar tabele */
+.league-table td a, .tabela-pocetna td a {
+    color: #111111 !important;
+}
+.league-table th,
+.league-table td{
+    padding:9px 5px;
+    border:1px solid #e2e8f0;
+    text-align:center;
+    font-size: 13px;
+}
+
+.league-table th{
+    background:#004488;
+    color:#fff;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.league-table tbody tr:nth-child(even){
+    background:#fafafa;
+}
+
+.league-table .our-team{
+    background:#e0f2fe!important;
+    font-weight:bold;
+}
+
+.club-cell{
+    display:flex!important;
+    align-items:center;
+    gap:8px;
+    text-align:left!important;
+    white-space:nowrap;
+    padding-left: 8px !important;
+}
+
+.club-cell img{
+    width:28px;
+    height:28px;
+    object-fit:contain;
+    flex:none;
+}
+
+.club-name-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.club-main-name {
+    font-weight: bold;
+    color: #003366;
+}
+
+.club-sub-name {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.position{
+    font-weight:bold;
+    width:35px;
+    color: #334155;
+}
+
+.points{
+    font-weight:bold;
+    color:#003366;
+    background:#f1f5f9;
+}
+/* =========================================================
+   VIJESTI
+========================================================= */
+
+.news-preview{
+    background:#f8fbff;
+
+    border:1px solid #cfe0f5;
+
+    border-radius:9px;
+
+    padding:18px;
+
+    text-align:left;
+
+    margin-top:20px;
+}
+
+.news-preview h3{
+    margin-top:0;
+}
+
+.news-preview img{
+    width:100%;
+
+    max-height:320px;
+
+    object-fit:contain;
+
+    background:#f2f4f7;
+
+    border-radius:8px;
+
+    margin:10px 0 15px;
+
+    cursor:pointer;
+}
+
+.news-meta{
+    font-size:.85em;
+
+    color:#777;
+
+    margin-bottom:10px;
+}
+
+.read-more{
+    display:inline-block;
+
+    background:#004488;
+
+    color:#fff;
+
+    padding:9px 14px;
+
+    border-radius:5px;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.news-list-card{
+    text-align:left;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    background:#fff;
+
+    margin-bottom:20px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.news-list-card:hover{
+    transform:translateY(-2px);
+
+    box-shadow:0 5px 15px #0002;
+}
+
+.news-list-card img{
+    width:100%;
+
+    max-height:400px;
+
+    object-fit:contain;
+
+    background:#f2f4f7;
+
+    border-radius:8px;
+
+    display:block;
+
+    margin-bottom:12px;
+}
+
+.news-list-card h3{
+    margin:0 0 8px;
+
+    color:#004488;
+
+    font-size:1.25em;
+}
+
+
+/* =========================================================
+   RASPORED
+========================================================= */
+
+.schedule-match-card{
+    background:#fff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    box-shadow:0 2px 5px #0000000d;
+
+    text-align:left;
+}
+
+.schedule-header{
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:.9em;
+
+    color:#666;
+
+    font-weight:bold;
+
+    border-bottom:1px solid #eee;
+
+    padding-bottom:6px;
+}
+
+.schedule-body{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    padding-top:10px;
+}
+
+
+/* =========================================================
+   STATISTIKA
+========================================================= */
+
+.stats-grid,
+.players-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(230px,1fr));
+
+    gap:20px;
+
+    margin-top:20px;
+}
+
+.players-grid.staff-grid{
+    grid-template-columns:
+        repeat(auto-fit,230px);
+
+    justify-content:start;
+}
+
+.stats-card,
+.player-card{
+    background:#fdfdfd;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:9px;
+
+    padding:15px;
+
+    box-shadow:0 2px 5px #0000000d;
+}
+
+.stats-card h3{
+    border-bottom:2px solid #ffcc00;
+
+    padding-bottom:5px;
+}
+
+.stat-item{
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:8px 0;
+
+    border-bottom:1px solid #eee;
+}
+
+
+/* =========================================================
+   IGRAČI
+========================================================= */
+
+.player-card{
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.player-card:hover{
+    transform:translateY(-3px);
+
+    box-shadow:0 5px 15px #0002;
+}
+
+.player-card img{
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
+    object-position:top;
+
+    border-radius:6px;
+}
+
+.player-name{
+    font-size:1.1em;
+
+    font-weight:bold;
+
+    color:#003366;
+
+    margin:8px 0 4px;
+}
+
+.player-position{
+    font-size:.9em;
+
+    color:#666;
+
+    font-weight:600;
+}
+
+.player-mini-stats{
+    font-size:.85em;
+
+    background:#f0f4f8;
+
+    padding:8px;
+
+    border-radius:4px;
+
+    margin-top:8px;
+
+    line-height:1.6;
+}
+
+.player-info-box{
+    text-align:left;
+
+    background:#f8fbff;
+
+    border:1px solid #cfe0f5;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    margin-top:12px;
+
+    display:none;
+}
+
+.player-info-box.open{
+    display:block;
+}
+
+.player-detail-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:7px 0;
+
+    border-bottom:1px solid #e5e5e5;
+}
+
+
+/* =========================================================
+   EKIPA
+========================================================= */
+
+.team-banner{
+    display:block;
+
+    width:100%;
+
+    height:auto;
+
+    max-height:650px;
+
+    object-fit:contain;
+
+    border-radius:8px;
+
+    margin:10px auto;
+}
+
+.main-img{
+    max-width:100%;
+
+    height:auto;
+
+    max-height:700px;
+
+    object-fit:contain;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   GALERIJA
+========================================================= */
+
+.gallery{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
+
+    gap:15px;
+
+    margin-top:15px;
+}
+
+.gallery img{
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
+    border-radius:6px;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   KONTAKT
+========================================================= */
+
+.president-box{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:20px;
+
+    margin-top:15px;
+}
+
+.president-img{
+    width:180px;
+
+    max-width:100%;
+
+    border-radius:8px;
+
+    border:3px solid #004488;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   ADS
+========================================================= */
+
+.ad-space{
+    margin-top:35px;
+
+    padding:20px;
+
+    border:2px dashed #004488;
+
+    background:#f8fbff;
+
+    border-radius:8px;
+}
+
+.ad-title{
+    font-size:.9em;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    color:#666;
+
+    margin-bottom:10px;
+}
+
+.ad-box{
+    background:#e9f2ff;
+
+    border:1px solid #b3d1ff;
+
+    padding:25px 15px;
+
+    border-radius:6px;
+
+    color:#004488;
+
+    font-weight:bold;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    background:#003366;
+
+    color:#fff;
+
+    padding:15px;
+
+    margin-top:30px;
+
+    font-size:.9em;
+
+    border-top:3px solid #ffcc00;
+}
+
+
+/* =========================================================
+   MODAL SLIKE
+========================================================= */
+
+.modal{
+    display:none;
+
+    position:fixed;
+
+    z-index:1000;
+
+    inset:0;
+
+    padding:40px 15px;
+
+    background:#000d;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.modal-content{
+    max-width:95%;
+
+    max-height:90vh;
+
+    border-radius:6px;
+
+    object-fit:contain;
+}
+
+.close{
+    position:absolute;
+
+    top:10px;
+
+    right:25px;
+
+    color:#fff;
+
+    font-size:40px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   MOBILNI
+========================================================= */
+
+@media(max-width:600px){
+
+    header{
+        padding:30px 10px 20px;
+    }
+
+    h1{
+        font-size:1.7em;
+    }
+
+    .league-title{
+        font-size:.8em;
+    }
+
+    .nav-tabs{
+        gap:5px;
+        padding:7px;
+    }
+
+    .tab-btn{
+        padding:8px 10px;
+        font-size:.82em;
+    }
+
+    .tab-content{
+        padding:15px;
+    }
+
+    .mini-schedule-badge{
+        position:relative;
+
+        top:auto;
+        right:auto;
+
+        display:inline-block;
+
+        margin-bottom:10px;
+    }
+
+    .match-main-info{
+        padding-right:0;
+    }
+
+    .match-teams{
+        font-size:1em;
+
+        gap:8px;
+    }
+
+    .result-teams{
+        gap:10px;
+    }
+
+    .result-logo{
+        width:38px;
+        height:38px;
+    }
+
+    .result-score{
+        font-size:1.5em;
+    }
+
+    .schedule-header{
+        flex-direction:column;
+
+        gap:5px;
+    }
+
+    .team-banner{
+        width:100%;
+
+        height:auto;
+
+        max-height:none;
+    }
+
+    .gallery{
+        grid-template-columns:1fr;
+    }
+
+    .gallery img{
+        height:auto;
+
+        max-height:350px;
+    }
+
+    .player-card img{
+        height:auto;
+
+        max-height:350px;
+    }
+
+    .player-detail-row{
+        flex-direction:column;
+
+        gap:3px;
+    }
+
+}
+
+
+/* =========================================================
+   IZVJEŠTAJ UTAKMICE
+========================================================= */
+
+.match-report-page{
+    max-width:950px;
+
+    margin:0 auto;
+
+    padding:0;
+    text-align:left;
+}
+
+.report-header{
+    background:
+        linear-gradient(#0008,#0009),
+        url('majica.webp');
+
+    background-size:cover;
+
+    background-position:center;
+
+    color:#fff;
+
+    border-radius:10px;
+
+    padding:25px 15px;
+
+    text-align:center;
+
+    margin-bottom:20px;
+}
+
+.report-header img{
+    width:90px;
+
+    height:90px;
+
+    object-fit:contain;
+
+    filter:drop-shadow(0 4px 8px #000);
+}
+
+.report-header h1{
+    font-size:1.5em;
+
+    margin:10px 0 0;
+}
+
+.report-date{
+    margin-top:8px;
+
+    font-size:.9em;
+
+    opacity:.9;
+}
+
+.report-score-box{
+    background:#fff;
+
+    border-radius:10px;
+
+    box-shadow:0 2px 10px #0002;
+
+    padding:25px;
+
+    text-align:center;
+
+    margin-bottom:20px;
+}
+
+.report-teams{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.report-team{
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-weight:bold;
+
+    color:#003366;
+}
+
+.report-team img{
+    width:70px;
+
+    height:70px;
+
+    object-fit:contain;
+}
+
+.report-final-score{
+    font-size:2.6em;
+
+    font-weight:bold;
+
+    color:#003366;
+}
+
+.report-section{
+    background:#fff;
+
+    border-radius:10px;
+
+    box-shadow:0 2px 10px #0002;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    text-align:left;
+}
+
+.report-section h2{
+    font-size:1.3em;
+
+    margin-bottom:15px;
+}
+
+.lineup-list{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.lineup-player{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:10px 12px;
+
+    background:#f8fbff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:6px;
+
+    font-weight:bold;
+
+    color:#003366;
+}
+
+.lineup-left{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+}
+
+.event-tag{
+    font-size:.85em;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.goal-tag{
+    color:#087a25;
+}
+
+.assist-tag{
+    color:#0066cc;
+}
+
+.yellow-tag{
+    color:#9a7800;
+}
+
+.sub-tag{
+    color:#555;
+}
+
+.bench-player{
+    background:#f5f5f5;
+}
+
+.report-back{
+    display:block;
+
+    width:100%;
+
+    max-width:400px;
+
+    margin:20px auto 0;
+
+    padding:13px 18px;
+
+    border-radius:6px;
+
+    background:#004488;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    border:0;
+
+    font-size:1em;
+}
+
+.report-back:hover{
+    background:#0066cc;
+}
+
+.report-note{
+    text-align:center;
+
+    color:#777;
+
+    font-size:.85em;
+
+    margin-top:10px;
+}
+
+
+/* =========================================================
+   MOBILE IZVJEŠTAJ
+========================================================= */
+
+@media(max-width:600px){
+
+    .match-report-page{
+        padding:0;
+    }
+
+    .report-header{
+        padding:20px 10px;
+    }
+
+    .report-header img{
+        width:75px;
+        height:75px;
+    }
+
+    .report-header h1{
+        font-size:1.25em;
+    }
+
+    .report-score-box{
+        padding:18px 10px;
+    }
+
+    .report-teams{
+        gap:10px;
+    }
+
+    .report-team img{
+        width:55px;
+        height:55px;
+    }
+
+    .report-final-score{
+        font-size:2em;
+    }
+
+    .report-section{
+        padding:15px;
+    }
+
+    .lineup-player{
+        padding:9px;
+
+        align-items:flex-start;
+    }
+
+}
+
+
+/* =========================================================
+   VIJEST — CIJELI ČLANAK (unutar iste stranice)
+========================================================= */
+
+.article-page{
+    max-width:900px;
+
+    margin:0 auto;
+
+    text-align:left;
+}
+
+.article-title-page{
+    color:#004488;
+
+    font-size:1.8em;
+
+    line-height:1.25;
+
+    margin:0 0 8px;
+}
+
+.article-meta-page{
+    color:#777;
+
+    font-size:.9em;
+
+    margin-bottom:15px;
+}
+
+.article-image-page{
+    display:block;
+
+    width:100%;
+
+    max-height:500px;
+
+    object-fit:contain;
+
+    background:#f2f4f7;
+
+    border-radius:8px;
+
+    margin:15px 0 25px;
+}
+
+.article-text-page{
+    font-size:1.05em;
+
+    line-height:1.8;
+}
+
+.article-text-page p{
+    margin:0 0 16px;
+}
+
+.article-text-page h3{
+    color:#004488;
+
+    border-bottom:2px solid #004488;
+
+    padding-bottom:8px;
+
+    margin-top:25px;
+}
+
+.quote{
+    border-left:4px solid #ffcc00;
+
+    padding:12px 16px;
+
+    background:#f8fbff;
+
+    font-style:italic;
+
+    margin:20px 0;
+}
+
+.article-signature{
+    margin-top:30px;
+
+    padding-top:15px;
+
+    border-top:2px solid #004488;
+
+    text-align:right;
+
+    color:#004488;
+
+    line-height:1.6;
+}
+
+@media(max-width:600px){
+
+    .article-title-page{
+        font-size:1.4em;
+    }
+
+    .article-text-page{
+        font-size:1em;
+    }
+
+    .article-image-page{
+        max-height:350px;
+    }
+
+}
+/* Stil za karticu utakmice i horizontalnu liniju rezultata */
+.match-card {
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    text-align: left;
+}
+
+.match-card-header {
+    font-size: 13px;
+    color: #1e3a8a;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Osigurava da timovi i rezultat budu u jednoj liniji i na telefonu */
+.match-teams-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.team-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 38%;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.team-block img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    margin-bottom: 6px;
+}
+
+.match-score-center {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: 1px;
+    width: 24%;
+    text-align: center;
+}
+
+.vs-text {
+    font-size: 16px;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.match-card-footer {
+    text-align: center;
+    font-size: 12px;
+    color: #475569;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+.match-btn {
+    width: 100%;
+    background-color: #004488;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+}
+ 
+/* Postavlja pozadinu svih redova u tabeli da budu crni, a tekst bijel */
+.league-table tr, .tabela-pocetna tr {
+    background-color: #111111 !important;
+}
+
+.league-table td, .tabela-pocetna td, 
+.league-table th, .tabela-pocetna th {
+    color: #ffffff !important;
+    background-color: #111111 !important;
+    border-color: #333333 !important;
+}
+
+/* Posebno podešavanje za red gdje je vaš klub (da se istakne plavičasto ili tamno) */
+.league-table tr.highlight, .tabela-pocetna tr.highlight {
+    background-color: #002244 !important;
+}
+.league-table tr.highlight td, .tabela-pocetna tr.highlight td {
+    background-color: #002244 !important;
+    color: #ffffff !important;
+}
+</style>
+
+</head>
+
+
+<body class="loading">
+
+
+<!-- =========================================================
+     SPLASH
+========================================================= -->
+
+<div id="splash-screen">
+
+    <div class="splash-content">
+
+        <img
+            src="grb.webp"
+            alt="Grb FK Sloboda"
+            class="splash-logo"
+            onerror="tryNextExt(this)"
+        >
+
+        <div class="loader"></div>
+
+        <p>
+            Učitavanje sajta u toku...
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+    <img
+        src="grb.webp"
+        alt="FK Sloboda Donji Zagoni Grb"
+        class="logo clickable-img"
+        onerror="tryNextExt(this)"
+    >
+
+    <h1>
+        FK SLOBODA DONJI ZAGONI
+    </h1>
+
+    <div class="league-title">
+        Zvanični sajt kluba
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     NAV
+========================================================= -->
+
+<nav class="nav-tabs">
+
+    <button
+        class="tab-btn active"
+        onclick="openTab(event,'pocetna')"
+    >
+        Početna
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'tabela')"
+    >
+        Tabela
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'raspored')"
+    >
+        Raspored
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'rezultati')"
+    >
+        Svi rezultati
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'vijesti')"
+    >
+        Vijesti
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'statistika')"
+    >
+        Statistika
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'sastav')"
+    >
+        Igrači i Trener
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'dresovi')"
+    >
+        Dresovi
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'stadion')"
+    >
+        Stadion
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'galerija')"
+    >
+        Galerija
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'fanzona')"
+    >
+        Fan zona
+    </button>
+
+    <button
+        class="tab-btn"
+        onclick="openTab(event,'kontakt')"
+    >
+        Kontakt
+    </button>
+
+</nav>
+
+
+<main class="container">
+
+
+<!-- =========================================================
+     POČETNA
+========================================================= -->
+
+<section
+    id="pocetna"
+    class="tab-content active"
+>
+
+    <!-- PRETHODNI REZULTAT -->
+
+<div class="match-card">
+    <div class="match-card-header">Prethodni rezultat · 1. Kolo</div>
+    
+    <div class="match-teams-row">
+        <div class="team-block">
+            <img src="grb.webp" alt="FK Sloboda">
+            <span>FK Sloboda</span>
+        </div>
+        
+        <div class="match-score-center">
+            2 : 1
+        </div>
+        
+        <div class="team-block">
+            <img src="grb_koridor.webp" alt="FK Koridor">
+            <span>FK Koridor</span>
+        </div>
+    </div>
+
+    <div class="match-card-footer">
+        30.08.2026. · Stadion Jabanuša
+    </div>
+    
+    <button class="match-btn" onclick="openMatchReport()">Pogledaj izvještaj utakmice</button>
+</div>
+
+
+    <!-- SLEDEĆA UTAKMICA -->
+
+   <div class="match-card">
+    <div class="match-card-header">Sljedeća utakmica · 2. Kolo</div>
+    
+    <div class="match-teams-row">
+        <div class="team-block">
+            <img src="grb_sloga_dazdarevo.webp" alt="Sloga">
+            <span>Sloga (Dazdarevo)</span>
+        </div>
+        
+        <div class="match-score-center vs-text">
+            VS
+        </div>
+        
+        <div class="team-block">
+            <img src="grb.webp" alt="FK Sloboda">
+            <span>FK Sloboda</span>
+        </div>
+    </div>
+
+    <div class="match-card-footer">
+        Datum: 06.09.2026. · Gostujući teren
+    </div>
+<!-- DUGME ZA RASPORED -->
+<div style="margin-top: 12px;">
+    <button class="match-btn" onclick="openTab(null,'raspored')" style="width: 100%; background-color: #004085; color: #ffffff; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer;">
+        Pogledaj kompletan raspored
+    </button>
+</div>
+</div>
+
+
+    <!-- TABELA -->
+
+    <h2> 
+Tabela – Druga opštinska liga Bijeljine
+    </h2>
+
+    <div id="homeTable"></div>
+
+<button class="match-btn"
+        onclick="openTab(null,'tabela')"
+    >
+        Pogledaj kompletnu tabelu
+    </button>
+
+
+    <!-- NAJNOVIJA VIJEST -->
+
+    <div class="news-preview">
+
+        <h3>
+            📰 Najnovija vijest
+        </h3>
+
+        <div class="news-meta">
+            20.08.2026. · FK Sloboda Donji Zagoni
+        </div>
+
+        <img
+            src="bojan_makaric.webp"
+            alt="Bojan Makarić"
+            class="clickable-img"
+            onclick="openNews(0)"
+            onerror="tryNextExt(this)"
+        >
+
+        <strong>
+            Nasilju nije mjesto ni na terenu ni van njega:
+            Napadnut sudija Bojan Makarić
+        </strong>
+
+        <p>
+            Sudija iz Bijeljine fizički je napadnut tokom turnira
+            u malom fudbalu u Brezovom Polju.
+        </p>
+
+      <div style="margin-top: 20px; text-align: center;">
+    <button class="match-btn" onclick="openTab(event, 'vijesti')" style="background-color: #004085; color: #ffffff; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer;">
+        Pogledaj ostale vijesti
+    </button>
+</div>
+
+    </div>
+
+
+    <div class="ad-space">
+
+        <div class="ad-title">
+            Sponzori i prijatelji kluba
+        </div>
+
+        <div class="ad-box">
+            Postanite sponzor FK Sloboda!
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TABELA
+========================================================= -->
+
+<section
+    id="tabela"
+    class="tab-content"
+>
+
+    <h2>
+        Tabela – Druga opštinska liga Bijeljine
+    </h2>
+
+    <p class="table-note">
+        Poredak se određuje prvenstveno prema broju bodova,
+        a zatim prema gol-razlici.
+    </p>
+
+    <div id="fullTable"></div>
+
+</section>
+
+
+<!-- =========================================================
+     RASPORED
+========================================================= -->
+<section id="raspored" class="tab-content">
+
+    <h2 style="text-align: center; color: #003366; margin-bottom: 20px;">Raspored utakmica – Jesenji dio 2026/27</h2>
+
+    <div id="scheduleList">
+
+        <!-- 2. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">2. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_sloga_dazdarevo.webp" alt="Sloga" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Sloga (Dazdarevo)</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">06.09.2026. · Gostujući teren</div>
+        </div>
+
+        <!-- 3. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">3. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_buducnost.webp" alt="Budućnost" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Budućnost (R. Polje)</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">13.09.2026. · Stadion Jabanuša</div>
+        </div>
+
+        <!-- 4. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">4. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_omladinac.webp" alt="Omladinac" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Omladinac (G. Čađavica)</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">20.09.2026. · Gostujući teren</div>
+        </div>
+
+        <!-- 5. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">5. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_sava.webp" alt="Sava" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Sava (Gradac)</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">27.09.2026. · Stadion Jabanuša</div>
+        </div>
+
+        <!-- 6. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">6. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_ostojicevo.webp" alt="Ostojićevo" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Ostojićevo</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">04.10.2026. · Gostujući teren</div>
+        </div>
+
+        <!-- 7. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">7. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_balatun.webp" alt="Balatun" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Balatun</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">11.10.2026. · Stadion Jabanuša</div>
+        </div>
+
+        <!-- 8. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">8. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_piperci.webp" alt="Piperci" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Piperci</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">18.10.2026. · Gostujući teren</div>
+        </div>
+
+        <!-- 9. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">9. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_koviljuse.webp" alt="Koviljuše" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Koviljuše (Bijeljina)</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">25.10.2026. · Stadion Jabanuša</div>
+        </div>
+
+        <!-- 10. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">10. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_polet.webp" alt="Polet" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Polet (G. Kojčinovac)</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">01.11.2026. · Gostujući teren</div>
+        </div>
+
+        <!-- 11. KOLO -->
+        <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">11. Kolo</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+                </div>
+                <div style="font-size: 18px; font-weight: bold; color: #666; padding: 0 10px;">VS</div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="grb_sloga94.webp" alt="Sloga 94" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                    <span style="font-weight: bold; font-size: 13px; color: #111;">Sloga 94 (Bijeljina)</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0;">08.11.2026. · Stadion Jabanuša</div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     SVI REZULTATI
+========================================================= -->
+<section id="rezultati" class="tab-content">
+
+    <h2 style="text-align: center; color: #003366; margin-bottom: 20px;">Svi rezultati</h2>
+
+    <!-- KARTICA UTAKMICE (IDENTIČNA KAO NA POČETNOJ) -->
+    <div style="background: #ffffff; border: 1px solid #d0dbe5; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+        
+        <!-- NASLOV / KOLO -->
+        <div style="text-align: center; font-weight: bold; color: #003366; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 15px;">
+            1. KOLO
+        </div>
+
+        <!-- RED SA TIMOVIMA I REZULTATOM -->
+        <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 15px;">
+            
+            <!-- DOMAĆIN -->
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <img src="grb.webp" alt="FK Sloboda" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                <span style="font-weight: bold; font-size: 13px; color: #111;">FK Sloboda</span>
+            </div>
+
+            <!-- REZULTAT -->
+            <div style="font-size: 22px; font-weight: bold; color: #111; padding: 0 10px;">
+                2 : 1
+            </div>
+
+            <!-- GOST -->
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <img src="grb_koridor.webp" alt="FK Koridor" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 6px;">
+                <span style="font-weight: bold; font-size: 13px; color: #111;">FK Koridor</span>
+            </div>
+
+        </div>
+
+        <!-- DATUM I STADION -->
+        <div style="text-align: center; font-size: 12px; color: #666; padding-top: 10px; border-top: 1px solid #f0f0f0; margin-bottom: 12px;">
+            30.08.2026. · Stadion Jabanuša
+        </div>
+
+        <!-- DUGME -->
+        <div>
+             <a
+            class="result-link"
+            href="#"
+            onclick="openMatchReport();return false;"
+" style="width: 100%; background-color: #004085; color: #ffffff; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer;">
+                Pogledaj izvještaj utakmice
+        
+           
+        
+
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     VIJESTI
+========================================================= -->
+
+<section
+    id="vijesti"
+    class="tab-content"
+>
+
+    <h2>
+        Vijesti
+    </h2>
+
+    <div id="newsList"></div>
+<div style="margin-top: 20px; text-align: center;">
+    <button class="match-btn" onclick="openTab(null,'vijesti')" style="background-color: #004085; color: #ffffff; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer;">
+        Pogledaj ostale vijesti
+    </button>
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     STATISTIKA
+========================================================= -->
+
+<section
+    id="statistika"
+    class="tab-content"
+>
+
+    <h2>
+        Statistika igrača – Sezona 2026/27
+    </h2>
+
+    <div class="stats-grid">
+
+        <div class="stats-card">
+
+            <h3>
+                ⚽ Golovi
+            </h3>
+
+            <div
+                class="stat-item"
+            >
+                <span>
+                    Rajko Đorđić
+                </span>
+
+                <strong>
+                    2
+                </strong>
+            </div>
+
+            <div
+                class="stat-item"
+            >
+                <span>
+                    Ostali
+                </span>
+
+                <strong>
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="stats-card">
+
+            <h3>
+                🎯 Asistencije
+            </h3>
+
+            <div class="stat-item">
+
+                <span>
+                    Đorđe Jović
+                </span>
+
+                <strong>
+                    1
+                </strong>
+
+            </div>
+
+            <div class="stat-item">
+
+                <span>
+                    Ostali
+                </span>
+
+                <strong>
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stats-card">
+
+            <h3>
+                🟨 Žuti kartoni
+            </h3>
+
+            <div class="stat-item">
+
+                <span>
+                    Radislav Stevanović
+                </span>
+
+                <strong>
+                    1
+                </strong>
+
+            </div>
+
+            <div class="stat-item">
+
+                <span>
+                    Darko Maksimović
+                </span>
+
+                <strong>
+                    1
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stats-card">
+
+            <h3>
+                🟥 Crveni kartoni
+            </h3>
+
+            <div class="stat-item">
+
+                <span>
+                    Svi igrači
+                </span>
+
+                <strong>
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SASTAV
+========================================================= -->
+
+<section
+    id="sastav"
+    class="tab-content"
+>
+
+    <h2>
+        FK Sloboda Donji Zagoni
+    </h2>
+
+    <img
+        src="ekipa.webp"
+        alt="FK Sloboda Ekipa"
+        class="team-banner clickable-img"
+        onerror="tryNextExt(this)"
+    >
+
+
+    <h2>
+        Stručni štab
+    </h2>
+
+    <div class="players-grid staff-grid">
+
+        <div class="player-card">
+
+            <img
+                src="trener.webp"
+                alt="Zoran Stankić"
+                class="clickable-img"
+                onerror="tryNextExt(this)"
+            >
+
+            <div class="player-name">
+                Zoran Stankić
+            </div>
+
+            <div class="player-position">
+                Glavni trener
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <h2>
+        Prvi tim – Igrači
+    </h2>
+
+    <div
+        class="players-grid"
+        id="playersGrid"
+    ></div>
+
+</section>
+
+
+<!-- =========================================================
+     DRESOVI
+========================================================= -->
+
+<section
+    id="dresovi"
+    class="tab-content"
+>
+
+    <h2>
+        Oprema i dresovi za sezonu 2026/27
+    </h2>
+
+    <img
+        src="dresovi.webp"
+        alt="Dresovi FK Sloboda"
+        class="main-img clickable-img"
+        onerror="tryNextExt(this)"
+    >
+
+</section>
+
+
+<!-- =========================================================
+     STADION
+========================================================= -->
+
+<section
+    id="stadion"
+    class="tab-content"
+>
+
+    <h2>
+        Stadion Jabanuša
+    </h2>
+
+    <img
+        src="stadion.webp"
+        alt="Stadion Jabanuša"
+        class="main-img clickable-img"
+        onerror="tryNextExt(this)"
+    >
+
+</section>
+
+
+<!-- =========================================================
+     GALERIJA
+========================================================= -->
+
+<section
+    id="galerija"
+    class="tab-content"
+>
+
+    <h2>
+        Galerija sa utakmica
+    </h2>
+
+    <div class="gallery">
+
+        <img
+            src="slika1.webp"
+            alt="Utakmica 1"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="slika2.webp"
+            alt="Utakmica 2"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="slika3.webp"
+            alt="Utakmica 3"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica1.webp"
+            alt="Utakmica 4"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica2.webp"
+            alt="Utakmica 5"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica3.webp"
+            alt="Utakmica 6"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica4.webp"
+            alt="Utakmica 7"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica5.webp"
+            alt="Utakmica 8"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica6.webp"
+            alt="Utakmica 9"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica7.webp"
+            alt="Utakmica 10"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica8.webp"
+            alt="Utakmica 11"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <img
+            src="utakmica9.webp"
+            alt="Utakmica 12"
+            class="clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FAN ZONA
+========================================================= -->
+
+<section
+    id="fanzona"
+    class="tab-content"
+>
+
+    <h2>
+        Fan zona
+    </h2>
+
+    <div
+        class="padlet-embed"
+        style="
+            border:1px solid #ddd;
+            border-radius:4px;
+            overflow:hidden;
+            width:100%;
+            background:#f4f4f4
+        "
+    >
+
+        <iframe
+            src="https://padlet.com/embed/gv0cr6j1tt6m1eir"
+            frameborder="0"
+            allow="camera;microphone;geolocation;display-capture;clipboard-write"
+            style="
+                width:100%;
+                height:608px;
+                display:block
+            "
+        ></iframe>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     KONTAKT
+========================================================= -->
+
+<section
+    id="kontakt"
+    class="tab-content"
+>
+
+    <h2>
+        Kontakt i uprava
+    </h2>
+
+    <div class="president-box">
+
+        <img
+            src="predsednik.webp"
+            alt="Željko Maksimović"
+            class="president-img clickable-img"
+            onerror="tryNextExt(this)"
+        >
+
+        <div style="text-align:left">
+
+            <p>
+
+                <strong>
+                    Predsjednik kluba:
+                </strong>
+
+                Željko Maksimović
+
+            </p>
+
+            <p>
+
+                <strong>
+                    Telefon:
+                </strong>
+
+                +387 65 919 955
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     IZVJEŠTAJ UTAKMICE (u sklopu stranice)
+========================================================= -->
+
+<section
+    id="izvjestaj"
+    class="tab-content"
+>
+
+    <div id="izvjestajContent"></div>
+
+</section>
+
+
+<!-- =========================================================
+     DETALJI VIJESTI (u sklopu stranice)
+========================================================= -->
+
+<section
+    id="vijest"
+    class="tab-content"
+>
+
+    <div id="vijestContent"></div>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    &copy; 2026 FK Sloboda Donji Zagoni
+
+</footer>
+
+
+<!-- =========================================================
+     IMAGE MODAL
+========================================================= -->
+
+<div
+    id="imageModal"
+    class="modal"
+>
+
+    <span
+        class="close"
+        onclick="closeModal()"
+    >
+        &times;
+    </span>
+
+    <img
+        class="modal-content"
+        id="modalImg"
+        alt=""
+    >
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   TABELA
+========================================================= */
+
+const teams = [
+    {name:"Ostojićevo", logo:"grb_ostojicevo.webp", ou:1, p:1, n:0, i:0, gf:3, ga:1, gr:2, bod:3, order:1},
+    {name:"Polet (G. Kojčinovac)", logo:"grb_polet.webp", ou:1, p:1, n:0, i:0, gf:3, ga:1, gr:2, bod:3, order:2},
+    {name:"FK Sloboda (Donji Zagoni)", logo:"grb.webp", ou:1, p:1, n:0, i:0, gf:2, ga:1, gr:1, bod:3, order:3, our:true},
+    {name:"Koviljuše (Bijeljina)", logo:"grb_koviljuse.webp", ou:1, p:0, n:1, i:0, gf:1, ga:1, gr:0, bod:1, order:4},
+    {name:"Budućnost (Ravno Polje)", logo:"grb_buducnost.webp", ou:1, p:0, n:1, i:0, gf:1, ga:1, gr:0, bod:1, order:5},
+    {name:"Piperci", logo:"grb_piperci.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:6},
+    {name:"Omladinac (G. Čađavica)", logo:"grb_omladinac.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:7},
+    {name:"Sava (Gradac)", logo:"grb_sava.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:8},
+    {name:"Balatun", logo:"grb_balatun.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:9},
+    {name:"FK Koridor", logo:"grb_koridor.webp", ou:1, p:0, n:0, i:1, gf:1, ga:2, gr:-1, bod:0, order:10},
+    {name:"Sloga (Dazdarevo)", logo:"grb_sloga_dazdarevo.webp", ou:1, p:0, n:0, i:1, gf:1, ga:2, gr:-1, bod:0, order:11},
+    {name:"Sloga 94 (Bijeljina)", logo:"grb_sloga94.webp", ou:1, p:0, n:0, i:1, gf:1, ga:2, gr:-1, bod:0, order:12}
+];
+
+
+function renderTable(id,short=false){
+
+    const el=document.getElementById(id);
+
+    if(!el){
+        return;
+    }
+
+    const sorted=[...teams].sort(
+        (a,b)=>
+            b.bod-a.bod ||
+            b.gr-a.gr ||
+            b.gf-a.gf ||
+            (a.order||999)-(b.order||999)
+    );
+
+    let html=
+        '<div class="table-wrap">'+
+        '<table class="league-table">'+
+        '<thead>'+
+        '<tr>'+
+        '<th>#</th>'+
+        '<th style="text-align:left">Klub</th>';
+
+   if(short){
+
+        html+=
+            '<th>Bod</th>'+
+            '</tr>'+
+            '</thead>'+
+            '<tbody>';
+
+    
+
+    }else{
+
+        html+=
+            '<th>OU</th>'+
+            '<th>P</th>'+
+            '<th>N</th>'+
+            '<th>I</th>'+
+            '<th>DG</th>'+
+            '<th>PG</th>'+
+            '<th>GR</th>'+
+            '<th>Bod</th>'+
+            '</tr>'+
+            '</thead>'+
+            '<tbody>';
+
+    }
+
+    sorted.forEach((t,index)=>{
+
+        html+=
+            `<tr class="${t.our?'our-team':''}">`+
+
+            `<td class="position">
+                ${index+1}
+            </td>`+
+
+            `<td class="club-cell">`+
+
+            `<img
+                src="${t.logo}"
+                alt=""
+                onerror="this.src='grb.webp'"
+            >`+
+
+            `<span>
+                ${t.name}
+            </span>`+
+
+            `</td>`;
+
+      if(short){
+
+            html+=
+                `<td class="points">
+                    ${t.bod}
+                </td>`+
+
+                `</tr>`;
+
+        
+
+        }else{
+
+            html+=
+                `<td>${t.ou}</td>`+
+                `<td>${t.p}</td>`+
+                `<td>${t.n}</td>`+
+                `<td>${t.i}</td>`+
+                `<td>${t.gf}</td>`+
+                `<td>${t.ga}</td>`+
+
+                `<td>
+                    ${t.gr>0?'+':''}${t.gr}
+                </td>`+
+
+                `<td class="points">
+                    ${t.bod}
+                </td>`+
+
+                `</tr>`;
+        }
+
+    });
+
+    html+=
+        '</tbody>'+
+        '</table>'+
+        '</div>';
+
+    el.innerHTML=html;
+
+}
+
+renderTable('homeTable',true);
+renderTable('fullTable',false);
+
+
+/* =========================================================
+   VIJESTI
+========================================================= */
+
+const newsData = [
+
+    {
+        title:
+            "Nasilju nije mjesto ni na terenu ni van njega: Napadnut sudija Bojan Makarić",
+
+        date:
+            "20.08.2026.",
+
+        image:
+            "bojan_makaric.webp",
+
+        content:`
+
+            <p>
+                <strong>
+                    Dugogodišnji fudbalski sudija Bojan Makarić iz Bijeljine
+                    fizički je napadnut tokom turnira u malom fudbalu
+                    u Brezovom Polju.
+                </strong>
+            </p>
+
+            <p>
+                Prema informacijama koje su objavili mediji,
+                Makarić je 18. avgusta 2026. godine napadnut
+                nakon jednog incidenta na turniru.
+                Policija Brčko distrikta BiH potvrdila je da je
+                u 23.07 časova prijavljeno da je igrač udario sudiju
+                u glavu, nakon čega je povrijeđeni prevezen
+                na ljekarski pregled u Bijeljinu.
+            </p>
+
+            <p>
+                Ljekar se u tom trenutku nije mogao izjasniti
+                o stepenu povreda dok se ne obavi CT snimak glave.
+            </p>
+
+            <p>
+                <strong>
+                    „Nakon prikupljanja svih činjenica događaja
+                    bit će preduzete zakonom predviđene mjere i radnje“,
+                </strong>
+                navodi se u saopštenju policije.
+            </p>
+
+            <p>
+                Bojan Makarić je sudija iz Bijeljine koji se nalazi
+                na <strong>B listi sudija WWin lige Bosne i Hercegovine</strong>,
+                a u aktuelnoj sezoni bio je angažovan i kao pomoćni sudija
+                na utakmicama najvišeg ranga.
+            </p>
+
+            <h3>
+                Kontroverze koje godinama prate njegovo suđenje
+            </h3>
+
+            <p>
+                Napad na sudiju ni na koji način ne može biti opravdan.
+                Ipak, slučaj je ponovo otvorio pitanje o njegovom radu
+                u nižim i amaterskim rangovima takmičenja.
+            </p>
+
+            <p>
+                Pojedini učesnici i ljubitelji amaterskog fudbala navode
+                da su neke njegove odluke bile veoma kontroverzne,
+                kao i da je u pojedinim utakmicama dolazilo do rasprava
+                i sukoba sa igračima.
+            </p>
+
+            <p>
+                U javnosti se pojavljuju i ozbiljniji navodi o njegovom
+                ranijem angažmanu u amaterskom fudbalu.
+                Takve navode ne možemo predstaviti kao činjenice
+                bez provjerljivih dokaza.
+            </p>
+
+            <div class="quote">
+
+                <strong>
+                    50 KM za suđenje, 100 KM za suđenje
+                    sa povećanim rizikom?
+                </strong>
+
+                <br><br>
+
+                Naravno, cijene sudijskih usluga ne određujemo mi,
+                a nasilje nikada ne smije biti dio „obračuna troškova“.
+
+            </div>
+
+            <h3>
+                Nasilje nije odgovor
+            </h3>
+
+            <p>
+                Bez obzira na sve kontroverze, neslaganja i eventualne
+                greške sudije, fizički napad ne može biti opravdan.
+            </p>
+
+            <p>
+                Kazna i disciplinski postupci treba da budu način
+                rješavanja sportskih sporova, a ne nasilje.
+            </p>
+
+            <div class="quote">
+
+                <strong>
+                    STOP NASILJU NA SPORTSKIM TERENIMA.
+                </strong>
+
+            </div>
+
+            <p>
+                Ako postoji problem sa suđenjem, odluka se može
+                osporavati kroz nadležne fudbalske organe,
+                prijave, disciplinske postupke i druge institucionalne
+                mehanizme.
+            </p>
+
+            <p>
+                Sudiji Bojanu Makariću želimo brz oporavak
+                i da se što prije vrati svom poslu i sportu.
+            </p>
+
+            <p>
+                <strong>
+                    Nikad poraz – uvijek lekcija.
+                </strong>
+            </p>
+
+        `
+    },
+
+
+    {
+        title:
+            "Goran Stevanović odlazi na pozajmicu u FC Namibia",
+
+        date:
+            "10.06.2026.",
+
+        image:
+            "igrac6.webp",
+
+        content:`
+
+            <p>
+                FK Sloboda Donji Zagoni danas se oprašta od svog igrača
+                <strong>Gorana Stevanovića</strong>, koji zbog porodičnih
+                obaveza seli u Afriku.
+            </p>
+
+            <p>
+                Goran će narednu polusezonu provesti u
+                <strong>FC Namibia</strong>, gdje odlazi na pozajmicu.
+            </p>
+
+            <div class="quote">
+
+                „Pozdrav svima, bez mene ovu polusezonu.
+                Neka vam je srećno u novoj sezoni.
+                Gdje god odeš, Sloboda ostaje u srcu.“
+
+            </div>
+
+            <p>
+                Sloboda mu želi mnogo sreće u novoj sredini,
+                uspješnu polusezonu i povratak kući.
+            </p>
+
+        `
+    },
+
+
+    {
+        title:
+            "Rade „Krcko“ Stevanović završio igračku karijeru",
+
+        date:
+            "2026.",
+
+        image:
+            "rade_krcko.webp",
+
+        content:`
+
+            <p>
+                Naš igrač
+                <strong>
+                    Rade Stevanović, poznatiji kao Krcko
+                </strong>,
+                nakon operacije srca odlučio je da se penzioniše
+                od aktivnog igranja fudbala.
+            </p>
+
+            <p>
+                Prije dvije sezone tresao je mreže,
+                a sada prelazi u rukovodstvo kluba,
+                gdje će svojim iskustvom nastaviti
+                da pomaže Slobodi.
+            </p>
+
+            <p>
+                Krcko će ostati upamćen kao jedan od prepoznatljivih
+                ljudi našeg kluba.
+            </p>
+
+        `
+    }
+
+];
+
+
+function renderNewsList(){
+
+    const container=
+        document.getElementById('newsList');
+
+    if(!container){
+        return;
+    }
+
+    container.innerHTML=
+        newsData.map((news,index)=>`
+
+            <article
+                class="news-list-card"
+                onclick="openNews(${index})"
+            >
+
+                <img
+                    src="${news.image}"
+                    alt="${escapeHtml(news.title)}"
+                    onerror="tryNextExt(this)"
+                >
+
+                <h3>
+                    ${escapeHtml(news.title)}
+                </h3>
+
+                <div class="news-meta">
+                    ${escapeHtml(news.date)}
+                    · FK Sloboda Donji Zagoni
+                </div>
+
+            </article>
+
+        `).join('');
+
+}
+
+
+renderNewsList();
+
+
+/* =========================================================
+   SIGURNOST
+========================================================= */
+
+function escapeHtml(text){
+
+    const div=document.createElement('div');
+
+    div.textContent=text;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   OTVARANJE VIJESTI (unutar iste stranice)
+========================================================= */
+
+function openNews(index){
+
+    const news = newsData[index];
+
+    if(!news){
+        return;
+    }
+
+    const container = document.getElementById('vijestContent');
+
+    if(!container){
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="article-page">
+
+            <h1 class="article-title-page">
+                ${escapeHtml(news.title)}
+            </h1>
+
+            <div class="article-meta-page">
+                ${escapeHtml(news.date)} · FK Sloboda Donji Zagoni
+            </div>
+
+            <img
+                class="article-image-page"
+                src="${news.image}"
+                alt="${escapeHtml(news.title)}"
+                onerror="tryNextExt(this)"
+            >
+
+            <div class="article-text-page">
+                ${news.content}
+            </div>
+
+            <div class="article-signature">
+                <strong>
+                    Urednik novina FK Sloboda Donji Zagoni
+                </strong>
+                <br>
+                <strong>
+                    D.S.
+                </strong>
+            </div>
+
+        </div>
+    `;
+
+    openTab(null,'vijest');
+
+}
+
+
+/* =========================================================
+   IGRAČI
+========================================================= */
+const players = [
+    {
+        image:"igrac1.webp",
+        name:"Branko Babalj",
+        birth:"10.02.1986.",
+        joined:"08.09.2023.",
+        position:"GOLMAN",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac2.webp",
+        name:"Luka Stankić",
+        birth:"31.10.2002.",
+        joined:"08.09.2023.",
+        position:"VEZNI",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac3.webp",
+        name:"Dejan Todorović",
+        birth:"20.03.1998.",
+        joined:"08.09.2023.",
+        position:"VEZNI",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac4.webp",
+        name:"Dražen Petrović",
+        birth:"18.04.1984.",
+        joined:"31.08.2000.",
+        position:"ODBRANA",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac5.webp",
+        name:"Radislav Stevanović",
+        birth:"28.04.1974.",
+        joined:"10.08.2011.",
+        position:"ODBRANA",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:1,
+        red:0
+    },
+    {
+        image:"igrac6.webp",
+        name:"Goran Stevanović",
+        birth:"03.06.1982.",
+        joined:"08.09.2023.",
+        position:"ODBRANA",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac7.webp",
+        name:"Rade Stankić",
+        birth:"23.08.2009.",
+        joined:"22.08.2025.",
+        position:"ODBRANA",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac8.webp",
+        name:"Slaviša Stanojević",
+        birth:"06.10.1991.",
+        joined:"06.02.2026.",
+        position:"NAPAD",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac9.webp",
+        name:"Miroslav Jović",
+        birth:"18.06.1969.",
+        joined:"19.09.2025.",
+        position:"VEZNI",
+        appearances:1,
+        minutes:50,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac10.webp",
+        name:"Miloš Marković",
+        birth:"05.02.2002.",
+        joined:"08.09.2023.",
+        position:"ODBRANA",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac11.webp",
+        name:"Aleksandar Petrović",
+        birth:"27.11.2026.",
+        joined:"29.03.2024.",
+        position:"NAPAD",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac12.webp",
+        name:"Branimir Pantić",
+        birth:"02.11.1991.",
+        joined:"28.08.2026.",
+        position:"VEZNI",
+        appearances:1,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac13.webp",
+        name:"Darko Perić",
+        birth:"04.12.1990.",
+        joined:"20.03.2026.",
+        position:"ODBRANA",
+        appearances:1,
+        minutes:40,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac14.webp",
+        name:"Đoko Mićić",
+        birth:"15.07.1997.",
+        joined:"08.09.2023.",
+        position:"ODBRANA",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac15.webp",
+        name:"Marko Galić",
+        birth:"02.03.1996.",
+        joined:"08.09.2023.",
+        position:"VEZNI",
+        appearances:1,
+        minutes:5,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac16.webp",
+        name:"Milan Spasojević",
+        birth:"11.11.2008.",
+        joined:"29.02.2024.",
+        position:"NAPAD",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac17.webp",
+        name:"Mladen Jović",
+        birth:"16.03.1983.",
+        joined:"08.09.2023.",
+        position:"GOLMAN",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac19.webp",
+        name:"Pavle Todorović",
+        birth:"13.07.2007.",
+        joined:"08.09.2023.",
+        position:"NAPAD",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac22.webp",
+        name:"Rajko Đorđić",
+        birth:"19.05.1987.",
+        joined:"07.03.2025.",
+        position:"VEZNI",
+        appearances:1,
+        minutes:90,
+        goals:2,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac23.webp",
+        name:"Siniša Đokić",
+        birth:"27.06.1992.",
+        joined:"08.09.2023.",
+        position:"ODBRANA",
+        appearances:1,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"djorjde_jovic.webp",
+        name:"Đorđe Jović",
+        birth:"08.05.2008.",
+        joined:"20.02.2026.",
+        position:"ODBRANA",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:1,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"igrac4.webp",
+        name:"Darko Maksimović",
+        birth:"12.09.2000.",
+        joined:"05.04.2024.",
+        position:"NAPAD",
+        appearances:1,
+        minutes:90,
+        goals:0,
+        assists:0,
+        yellow:1,
+        red:0
+    },
+    {
+        image:"rade_krcko.webp",
+        name:"Rade Stevanović",
+        birth:"12.11.1980.",
+        joined:"09.05.2025.",
+        position:"NAPAD",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"zarko_rikanovic.webp",
+        name:"Žarko Rikanović",
+        birth:"29.01.1983.",
+        joined:"26.08.2026.",
+        position:"VEZNI",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    },
+    {
+        image:"sasa_spasojevic.webp",
+        name:"Saša Spasojević",
+        birth:"07.04.2006.",
+        joined:"13.09.2024.",
+        position:"NAPAD",
+        appearances:0,
+        minutes:0,
+        goals:0,
+        assists:0,
+        yellow:0,
+        red:0
+    }
+];
+
+/* =========================================================
+   GENERISANJE IGRAČA
+========================================================= */
+function renderPlayers() {
+    const grid = document.getElementById('playersGrid');
+    if (!grid) {
+        return;
+    }
+
+    grid.innerHTML = players.map((p, index) => `
+        <div class="player-card" onclick="togglePlayer(${index})">
+            <img src="${p.image}" alt="${escapeHtml(p.name)}" onerror="tryNextExt(this)">
+            <div class="player-name">${escapeHtml(p.name)}</div>
+            <div class="player-position">${escapeHtml(p.position)}</div>
+            <div class="player-mini-stats">
+                👕 ${p.appearances}
+                · ⏱️ ${p.minutes > 0 ? p.minutes + "'" : (p.appearances > 0 ? 'Nastup' : '0')}
+                · ⚽ ${p.goals}
+                · 🎯 ${p.assists}
+                · 🟨 ${p.yellow}
+                · 🟥 ${p.red}
+            </div>
+            <div class="player-info-box" id="playerInfo${index}">
+                <div class="player-detail-row">
+                    <strong>Datum rođenja</strong>
+                    <span>${p.birth}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>U klubu od</strong>
+                    <span>${p.joined}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>Pozicija</strong>
+                    <span>${escapeHtml(p.position)}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>Broj nastupa</strong>
+                    <span>${p.appearances}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>Odigrani minuti</strong>
+                    <span>${p.minutes > 0 ? p.minutes + ' min' : (p.appearances > 0 ? 'Igrao (minutaža nep.)' : '0 min')}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>Golovi</strong>
+                    <span>${p.goals}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>Asistencije</strong>
+                    <span>${p.assists}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>Žuti kartoni</strong>
+                    <span>🟨 ${p.yellow}</span>
+                </div>
+                <div class="player-detail-row">
+                    <strong>Crveni kartoni</strong>
+                    <span>🟥 ${p.red}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+renderPlayers();
+
+
+function togglePlayer(index){
+
+    const info=
+        document.getElementById(
+            'playerInfo'+index
+        );
+
+    if(!info){
+        return;
+    }
+
+    info.classList.toggle('open');
+
+}
+
+
+/* =========================================================
+   SPLASH
+========================================================= */
+
+window.addEventListener(
+    'load',
+    ()=>{
+
+        const splash=
+            document.getElementById(
+                'splash-screen'
+            );
+
+        setTimeout(
+            ()=>{
+
+                splash.classList.add(
+                    'fade-out'
+                );
+
+                setTimeout(
+                    ()=>{
+
+                        splash.style.display=
+                            'none';
+
+                        document.documentElement
+                            .classList
+                            .remove('loading');
+
+                        document.body
+                            .classList
+                            .remove('loading');
+
+                    },
+                    800
+                );
+
+            },
+            1200
+        );
+
+    }
+);
+
+
+/* =========================================================
+   REZERVNE EKSTENZIJE SLIKA
+========================================================= */
+
+function tryNextExt(img){
+
+    if(!img.dataset.step){
+
+        img.dataset.step='1';
+
+    }else{
+
+        img.dataset.step=
+            String(
+                Number(img.dataset.step)+1
+            );
+
+    }
+
+    const currentSrc=
+        img.src;
+
+    const lastDot=
+        currentSrc.lastIndexOf('.');
+
+    if(lastDot===-1){
+        return;
+    }
+
+    const base=
+        currentSrc.substring(
+            0,
+            lastDot
+        );
+
+    const ext={
+        1:'.png',
+        2:'.jpg',
+        3:'.jpeg',
+        4:'.JPG',
+        5:'.PNG',
+        6:'.WEBP'
+    }[img.dataset.step];
+
+    if(ext){
+
+        img.src=
+            base+ext;
+
+    }
+
+}
+
+
+/* =========================================================
+   TABOVI
+========================================================= */
+
+let currentTab='pocetna';
+
+
+function openTab(
+    evt,
+    tabName,
+    saveHistory=true
+){
+
+    const target=
+        document.getElementById(tabName);
+
+    if(!target){
+        return;
+    }
+
+
+    document
+        .querySelectorAll('.tab-content')
+        .forEach(
+            x=>{
+                x.classList.remove(
+                    'active'
+                );
+            }
+        );
+
+
+    document
+        .querySelectorAll('.tab-btn')
+        .forEach(
+            x=>{
+                x.classList.remove(
+                    'active'
+                );
+            }
+        );
+
+
+    target.classList.add('active');
+
+
+    document
+        .querySelectorAll('.tab-btn')
+        .forEach(button=>{
+
+            const value=
+                button.getAttribute(
+                    'onclick'
+                );
+
+            if(
+                value &&
+                value.includes(
+                    "'" + tabName + "'"
+                )
+            ){
+
+                button.classList.add(
+                    'active'
+                );
+
+            }
+
+        });
+
+
+    currentTab=
+        tabName;
+
+
+    if(saveHistory){
+        const url = new URL(window.location.href);
+        url.hash = tabName;
+        history.pushState({tab:tabName}, '', url.href);
+    }
+
+
+    window.scrollTo(0,0);
+
+}
+
+
+/* =========================================================
+   BROWSER BACK / FORWARD
+========================================================= */
+
+window.addEventListener(
+    'popstate',
+    function(event){
+
+        let tab='pocetna';
+
+        if(
+            event.state &&
+            event.state.tab
+        ){
+
+            tab=
+                event.state.tab;
+
+        }else if(
+            window.location.hash
+        ){
+
+            tab=
+                window.location.hash
+                    .substring(1);
+
+        }
+
+        if(
+            !document.getElementById(tab)
+        ){
+
+            tab='pocetna';
+
+        }
+
+        openTab(
+            null,
+            tab,
+            false
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PRVO OTVARANJE
+========================================================= */
+
+window.addEventListener(
+    'load',
+    function(){
+
+        const hash=
+            window.location.hash;
+
+        if(hash){
+
+            let tabName=
+                hash.substring(1);
+
+            if(
+                !document.getElementById(
+                    tabName
+                )
+            ){
+
+                tabName='pocetna';
+
+            }
+
+            history.replaceState(
+                {
+                    tab:tabName
+                },
+                '',
+                window.location.pathname+
+                window.location.search+
+                '#'+tabName
+            );
+
+            openTab(
+                null,
+                tabName,
+                false
+            );
+
+        }else{
+
+            history.replaceState(
+                {
+                    tab:'pocetna'
+                },
+                '',
+                window.location.pathname+
+                window.location.search+
+                '#pocetna'
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   OTVARANJE SLIKE
+========================================================= */
+
+const modal=
+    document.getElementById(
+        'imageModal'
+    );
+
+const modalImg=
+    document.getElementById(
+        'modalImg'
+    );
+
+
+document.addEventListener(
+    'click',
+    e=>{
+
+        if(
+            e.target.classList
+                .contains(
+                    'clickable-img'
+                )
+        ){
+
+            modal.style.display=
+                'flex';
+
+            modalImg.src=
+                e.target.src;
+
+        }
+
+    }
+);
+
+
+function closeModal(){
+
+    modal.style.display=
+        'none';
+
+}
+
+
+modal.addEventListener(
+    'click',
+    e=>{
+
+        if(
+            e.target===modal
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    'keydown',
+    e=>{
+
+        if(
+            e.key==='Escape'
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   IZVJEŠTAJ UTAKMICE (unutar iste stranice)
+========================================================= */
+
+function openMatchReport(){
+    const container = document.getElementById('izvjestajContent');
+    if(!container){
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="match-report-page">
+
+            <div class="report-header">
+                <img src="grb.webp" alt="FK Sloboda" onerror="tryNextExt(this)">
+                <h1>FK SLOBODA DONJI ZAGONI</h1>
+                <div class="report-date">30.08.2026. · 1. Kolo</div>
+            </div>
+
+            <div class="report-score-box">
+                <div class="report-teams">
+                    <div class="report-team">
+                        <img src="grb.webp" alt="FK Sloboda" onerror="tryNextExt(this)">
+                        <span>FK Sloboda</span>
+                    </div>
+                    <div class="report-final-score">
+                        2 : 1
+                    </div>
+                    <div class="report-team">
+                        <img src="grb_koridor.webp" alt="FK Koridor" onerror="this.src='grb.webp'">
+                        <span>FK Koridor</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2>Startna postava</h2>
+                <div class="lineup-list">
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Branko Babalj</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Đorđe Jović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag assist-tag">🎯</span>
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Dražen Petrović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Radislav Stevanović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag yellow-tag">🟨</span>
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Miloš Marković</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Miroslav Jović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag out-tag">↩️ 50'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Luka Stankić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Dejan Todorović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Slaviša Stanojević</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Darko Maksimović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag yellow-tag">🟨</span>
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Rajko Đorđić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag goal-tag">⚽⚽</span>
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2>Klupa</h2>
+                <div class="lineup-list">
+
+                    <div class="lineup-player bench-player">
+                        <div class="lineup-left">Darko Perić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag in-tag">↪️ 50'</span>
+                            <span class="event-tag out-tag">↩️ 85'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player bench-player">
+                        <div class="lineup-left">Marko Galić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag in-tag">↪️ 85'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player bench-player">
+                        <div class="lineup-left">Siniša Đokić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">0'</span>
+
+                        </div>
+                    </div>
+
+                    <div class="lineup-player bench-player">
+                        <div class="lineup-left">Branimir Pantić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">0'</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    openTab(null,'izvjestaj');
+}
+/* =========================================================
+   KRAJ
+========================================================= */
+
+</script>
+
+
+</body>
+
+</html>
