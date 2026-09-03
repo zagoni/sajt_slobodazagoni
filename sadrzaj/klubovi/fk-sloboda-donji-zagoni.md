@@ -1,4 +1,4 @@
 ---
-title: FK Sloboda Donji Zagoni
+title: Sloboda Donji Zagoni
 logo: /slike/grb.webp
 ---
