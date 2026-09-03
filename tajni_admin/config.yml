@@ -48,24 +48,32 @@ collections:
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
-  # 2. KLUBOVI U LIGI (Za padajući meni protivnika)
+  # 2. KLUBOVI U LIGI
   - name: "klubovi"
     label: "Klubovi u ligi"
     folder: "sadrzaj/klubovi"
     create: true
     slug: "{{slug}}"
+    identifier_field: "title"
     fields:
       - { label: "Naziv kluba", name: "title", widget: "string" }
       - { label: "Grb kluba", name: "logo", widget: "image", required: false }
 
-  # 3. TABELA LIGE (Ručni unos / uređivanje redosleda i statistike timova)
+  # 3. TABELA LIGE (Sada automatski vuče klubove iz sekcije Klubovi u ligi)
   - name: "tabela"
     label: "Tabela Lige"
     folder: "sadrzaj/tabela"
     create: true
     slug: "{{slug}}"
+    identifier_field: "title"
     fields:
-      - { label: "Naziv kluba", name: "title", widget: "string" }
+      - label: "Naziv kluba"
+        name: "title"
+        widget: "relation"
+        collection: "klubovi"
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
       - { label: "Odigrano utakmica", name: "played", widget: "number", default: 0 }
       - { label: "Pobjede", name: "won", widget: "number", default: 0 }
       - { label: "Neriješene", name: "drawn", widget: "number", default: 0 }
@@ -93,6 +101,7 @@ collections:
     folder: "sadrzaj/igraci"
     create: true
     slug: "{{slug}}"
+    identifier_field: "title"
     fields:
       - { label: "Ime i prezime", name: "title", widget: "string" }
       - { label: "Broj dresa", name: "number", widget: "number" }
