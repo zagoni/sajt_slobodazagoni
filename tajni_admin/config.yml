@@ -13,12 +13,18 @@ collections:
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - { label: "Protivnik", name: "opponent", widget: "string" }
+      - label: "Protivnik"
+        name: "opponent"
+        widget: "relation"
+        collection: "klubovi"
+        search_fields: ["title"]
+        value_field: "title"
+        display_fields: ["title"]
       - { label: "Datum i vrijeme", name: "date", widget: "datetime" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
       - { label: "Kolo", name: "round", widget: "number", default: 1 }
       
-      # Polja za odigranu utakmicu (Kada unesete rezultat, meč ide u Prethodni meč)
+      # Polja za odigranu utakmicu
       - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
       - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
       - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
@@ -42,7 +48,33 @@ collections:
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
-  # 2. VIJESTI
+  # 2. KLUBOVI U LIGI (Za padajući meni protivnika)
+  - name: "klubovi"
+    label: "Klubovi u ligi"
+    folder: "sadrzaj/klubovi"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Naziv kluba", name: "title", widget: "string" }
+      - { label: "Grb kluba", name: "logo", widget: "image", required: false }
+
+  # 3. TABELA LIGE (Ručni unos / uređivanje redosleda i statistike timova)
+  - name: "tabela"
+    label: "Tabela Lige"
+    folder: "sadrzaj/tabela"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Naziv kluba", name: "title", widget: "string" }
+      - { label: "Odigrano utakmica", name: "played", widget: "number", default: 0 }
+      - { label: "Pobjede", name: "won", widget: "number", default: 0 }
+      - { label: "Neriješene", name: "drawn", widget: "number", default: 0 }
+      - { label: "Porazi", name: "lost", widget: "number", default: 0 }
+      - { label: "Dati golovi", name: "goals_for", widget: "number", default: 0 }
+      - { label: "Primljeni golovi", name: "goals_against", widget: "number", default: 0 }
+      - { label: "Bodovi", name: "points", widget: "number", default: 0 }
+
+  # 4. VIJESTI
   - name: "vijesti"
     label: "Vijesti"
     folder: "sadrzaj/vijesti"
@@ -55,22 +87,19 @@ collections:
       - { label: "Kratak opis (za početnu stranu)", name: "summary", widget: "text" }
       - { label: "Glavni sadržaj / Tekst", name: "body", widget: "markdown" }
 
-  # 3. IGRAČI (ROSTER I POČETNA/KORIGOVANA STATISTIKA)
+  # 5. IGRAČI (ROSTER I POČETNA/KORIGOVANA STATISTIKA)
   - name: "igraci"
     label: "Igrači"
     folder: "sadrzaj/igraci"
     create: true
     slug: "{{slug}}"
     fields:
-      # Profilni podaci
       - { label: "Ime i prezime", name: "title", widget: "string" }
       - { label: "Broj dresa", name: "number", widget: "number" }
       - { label: "Pozicija", name: "position", widget: "select", options: ["Golman", "Odbrana", "Vezni", "Napad"] }
       - { label: "Datum rođenja", name: "birth_date", widget: "date", format: "YYYY-MM-DD", required: false }
       - { label: "U klubu od (godina)", name: "in_club_since", widget: "string", default: "2024" }
       - { label: "Fotografija igrača", name: "photo", widget: "image", required: false }
-
-      # Korekcija i početno stanje (statistika od koje kreće sabiranje)
       - { label: "Početni/Korigovani nastupi", name: "base_appearances", widget: "number", default: 0 }
       - { label: "Početni/Korigovani minuti", name: "base_minutes", widget: "number", default: 0 }
       - { label: "Početni/Korigovani golovi", name: "base_goals", widget: "number", default: 0 }
