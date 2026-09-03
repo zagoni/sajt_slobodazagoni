@@ -6,51 +6,58 @@ media_folder: "slike"
 public_folder: "/slike"
 
 collections:
-  # 1. RASPORED I IZVJEŠTAJI SA UTAKMITA
+  # 1. UTKMICE I RASPORED
   - name: "utakmice"
-    label: "Raspored i Utakmice"
+    label: "Utakmice i Izvještaji"
     folder: "sadrzaj/utakmice"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Protivnik", name: "opponent", widget: "string" }
       - { label: "Datum i vrijeme", name: "date", widget: "datetime" }
-      - { label: "Mjesto", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
+      - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
       - { label: "Kolo", name: "round", widget: "number", default: 1 }
       
-      # Ako je utakmica odigrana, popunjava se ovo:
+      # Polja za odigranu utakmicu
       - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
       - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
-      - { label: "Poveži sa vijesti/izvještajem", name: "related_news", widget: "relation", collection: "vijesti", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], required: false }
+      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
 
-      # STATISTIKA IGRAČA ZA OVU UTAKMICU
-      - label: "Zapisnik / Statistika igrača"
+      # LISTA IGRAČA KOJI SU IGRALI (Odabir iz postojeće baze igrača)
+      - label: "Sastav i učinak igrača"
         name: "player_stats"
         widget: "list"
         required: false
         fields:
-          - { label: "Igrač", name: "player", widget: "relation", collection: "igraci", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"] }
+          - label: "Izaberi igrača"
+            name: "player"
+            widget: "relation"
+            collection: "igraci"
+            search_fields: ["title"]
+            value_field: "{{slug}}"
+            display_fields: ["title"]
           - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 }
           - { label: "Golovi", name: "goals", widget: "number", default: 0 }
           - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
-  # 2. VIJESTI I IZVJEŠTAJI
+  # 2. VIJESTI
   - name: "vijesti"
-    label: "Vijesti i Izvještaji"
+    label: "Vijesti"
     folder: "sadrzaj/vijesti"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Naslov", name: "title", widget: "string" }
       - { label: "Datum", name: "date", widget: "datetime" }
-      - { label: "Glavna slika", name: "image", widget: "image", required: false }
-      - { label: "Sadržaj / Tekst izvještaja", name: "body", widget: "markdown" }
+      - { label: "Slika", name: "image", widget: "image", required: false }
+      - { label: "Kratak opis", name: "summary", widget: "text" }
+      - { label: "Sadržaj", name: "body", widget: "markdown" }
 
-  # 3. IGRAČI
+  # 3. IGRAČI (ROSTER)
   - name: "igraci"
-    label: "Igrači (Kadar)"
+    label: "Igrači"
     folder: "sadrzaj/igraci"
     create: true
     slug: "{{slug}}"
