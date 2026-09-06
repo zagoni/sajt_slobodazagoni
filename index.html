@@ -703,56 +703,71 @@ h3{
 /* =========================================================
    STATISTIKA
 ========================================================= */
+<div class="stats-grid">
 
-.stats-grid,
-.players-grid{
-    display:grid;
+    <div class="stats-card">
+        <h3>⚽ Golovi</h3>
 
-    grid-template-columns:
-        repeat(auto-fit,minmax(230px,1fr));
+        <div class="stat-item">
+            <span>Rajko Đorđić</span>
+            <strong>2</strong>
+        </div>
 
-    gap:20px;
+        <div class="stat-item">
+            <span>Luka Stankić</span>
+            <strong>1</strong>
+        </div>
+    </div>
 
-    margin-top:20px;
-}
+    <div class="stats-card">
+        <h3>🎯 Asistencije</h3>
 
-.players-grid.staff-grid{
-    grid-template-columns:
-        repeat(auto-fit,230px);
+        <div class="stat-item">
+            <span>Đorđe Jović</span>
+            <strong>1</strong>
+        </div>
 
-    justify-content:start;
-}
+        <div class="stat-item">
+            <span>Dražen Petrović</span>
+            <strong>1</strong>
+        </div>
+    </div>
 
-.stats-card,
-.player-card{
-    background:#fdfdfd;
+    <div class="stats-card">
+        <h3>🟨 Žuti kartoni</h3>
 
-    border:1px solid #e2e8f0;
+        <div class="stat-item">
+            <span>Radislav Stevanović</span>
+            <strong>1</strong>
+        </div>
 
-    border-radius:9px;
-
-    padding:15px;
-
-    box-shadow:0 2px 5px #0000000d;
-}
-
-.stats-card h3{
-    border-bottom:2px solid #ffcc00;
-
-    padding-bottom:5px;
-}
-
-.stat-item{
-    display:flex;
-
-    justify-content:space-between;
-
-    padding:8px 0;
-
-    border-bottom:1px solid #eee;
-}
+    <div class="stat-item">
+            <span>Slaviša Stanojević</span>
+            <strong>1</strong>
+        </div>
 
 
+        <div class="stat-item">
+            <span>Darko Maksimović</span>
+            <strong>1</strong>
+        </div>
+
+        <div class="stat-item">
+            <span>Đorđe Jović</span>
+            <strong>1</strong>
+        </div>
+    </div>
+
+    <div class="stats-card">
+        <h3>🟥 Crveni kartoni</h3>
+
+        <div class="stat-item">
+            <span>Svi igrači</span>
+            <strong>0</strong>
+        </div>
+    </div>
+
+</div>
 /* =========================================================
    IGRAČI
 ========================================================= */
@@ -1832,56 +1847,67 @@ footer{
     <!-- PRETHODNI REZULTAT -->
 
 <div class="match-card">
-    <div class="match-card-header">Prethodni rezultat · 1. Kolo</div>
-    
+    <div class="match-card-header">Prethodni rezultat · 2. Kolo</div>
+
     <div class="match-teams-row">
+        <div class="team-block">
+            <img src="grb_sloga_dazdarevo.webp" alt="Sloga Dazdarevo">
+            <span>Sloga (Dazdarevo)</span>
+        </div>
+
+        <div class="match-score-center">
+            0 : 1
+        </div>
+
         <div class="team-block">
             <img src="grb.webp" alt="FK Sloboda">
             <span>FK Sloboda</span>
         </div>
-        
-        <div class="match-score-center">
-            2 : 1
-        </div>
-        
-        <div class="team-block">
-            <img src="grb_koridor.webp" alt="FK Koridor">
-            <span>FK Koridor</span>
-        </div>
     </div>
 
     <div class="match-card-footer">
-        30.08.2026. · Stadion Jabanuša
+        06.09.2026. · Gostujući teren
     </div>
-    
-    <button class="match-btn" onclick="openMatchReport()">Pogledaj izvještaj utakmice</button>
-</div>
 
+    <button class="match-btn" onclick="openMatchReport2()">
+        Pogledaj izvještaj utakmice
+    </button>
 
     <!-- SLEDEĆA UTAKMICA -->
 
-   <div class="match-card">
-    <div class="match-card-header">Sljedeća utakmica · 2. Kolo</div>
-    
+  <div class="match-card">
+    <div class="match-card-header">Sljedeća utakmica · 3. Kolo</div>
+
     <div class="match-teams-row">
-        <div class="team-block">
-            <img src="grb_sloga_dazdarevo.webp" alt="Sloga">
-            <span>Sloga (Dazdarevo)</span>
-        </div>
-        
-        <div class="match-score-center vs-text">
-            VS
-        </div>
-        
         <div class="team-block">
             <img src="grb.webp" alt="FK Sloboda">
             <span>FK Sloboda</span>
         </div>
+
+        <div class="match-score-center vs-text">
+            VS
+        </div>
+
+        <div class="team-block">
+            <img src="grb_buducnost.webp" alt="Budućnost">
+            <span>Budućnost (R. Polje)</span>
+        </div>
     </div>
 
     <div class="match-card-footer">
-        Datum: 06.09.2026. · Gostujući teren
+        13.09.2026. · Stadion Jabanuša
     </div>
+
+    <div style="margin-top:12px;">
+        <button
+            class="match-btn"
+            onclick="openTab(null,'raspored')"
+        >
+            Pogledaj kompletan raspored
+        </button>
+    </div>
+</div>
+
 <!-- DUGME ZA RASPORED -->
 <div style="margin-top: 12px;">
     <button class="match-btn" onclick="openTab(null,'raspored')" style="width: 100%; background-color: #004085; color: #ffffff; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer;">
@@ -2766,21 +2792,92 @@ Tabela – Druga opštinska liga Bijeljine
 ========================================================= */
 
 const teams = [
-    {name:"Ostojićevo", logo:"grb_ostojicevo.webp", ou:1, p:1, n:0, i:0, gf:3, ga:1, gr:2, bod:3, order:1},
-    {name:"Polet (G. Kojčinovac)", logo:"grb_polet.webp", ou:1, p:1, n:0, i:0, gf:3, ga:1, gr:2, bod:3, order:2},
-    {name:"FK Sloboda (Donji Zagoni)", logo:"grb.webp", ou:1, p:1, n:0, i:0, gf:2, ga:1, gr:1, bod:3, order:3, our:true},
-    {name:"Koviljuše (Bijeljina)", logo:"grb_koviljuse.webp", ou:1, p:0, n:1, i:0, gf:1, ga:1, gr:0, bod:1, order:4},
-    {name:"Budućnost (Ravno Polje)", logo:"grb_buducnost.webp", ou:1, p:0, n:1, i:0, gf:1, ga:1, gr:0, bod:1, order:5},
-    {name:"Piperci", logo:"grb_piperci.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:6},
-    {name:"Omladinac (G. Čađavica)", logo:"grb_omladinac.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:7},
-    {name:"Sava (Gradac)", logo:"grb_sava.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:8},
-    {name:"Balatun", logo:"grb_balatun.webp", ou:0, p:0, n:0, i:0, gf:0, ga:0, gr:0, bod:0, order:9},
-    {name:"FK Koridor", logo:"grb_koridor.webp", ou:1, p:0, n:0, i:1, gf:1, ga:2, gr:-1, bod:0, order:10},
-    {name:"Sloga (Dazdarevo)", logo:"grb_sloga_dazdarevo.webp", ou:1, p:0, n:0, i:1, gf:1, ga:2, gr:-1, bod:0, order:11},
-    {name:"Sloga 94 (Bijeljina)", logo:"grb_sloga94.webp", ou:1, p:0, n:0, i:1, gf:1, ga:2, gr:-1, bod:0, order:12}
+    {
+        name:"Polet (G. Kojčinovac)",
+        logo:"grb_polet.webp",
+        ou:2, p:2, n:0, i:0,
+        gf:7, ga:1, gr:6, bod:6,
+        order:1
+    },
+    {
+        name:"FK Sloboda (Donji Zagoni)",
+        logo:"grb.webp",
+        ou:2, p:2, n:0, i:0,
+        gf:3, ga:1, gr:2, bod:6,
+        order:2,
+        our:true
+    },
+    {
+        name:"Koviljuše (Bijeljina)",
+        logo:"grb_koviljuse.webp",
+        ou:2, p:1, n:1, i:0,
+        gf:6, ga:3, gr:3, bod:4,
+        order:3
+    },
+    {
+        name:"Ostojićevo",
+        logo:"grb_ostojicevo.webp",
+        ou:2, p:1, n:1, i:0,
+        gf:4, ga:2, gr:2, bod:4,
+        order:4
+    },
+    {
+        name:"FK Koridor",
+        logo:"grb_koridor.webp",
+        ou:2, p:1, n:0, i:1,
+        gf:3, ga:3, gr:0, bod:3,
+        order:5
+    },
+    {
+        name:"Balatun",
+        logo:"grb_balatun.webp",
+        ou:1, p:0, n:1, i:0,
+        gf:1, ga:1, gr:0, bod:1,
+        order:6
+    },
+    {
+        name:"Budućnost (Ravno Polje)",
+        logo:"grb_buducnost.webp",
+        ou:2, p:0, n:1, i:1,
+        gf:1, ga:5, gr:-4, bod:1,
+        order:7
+    },
+    {
+        name:"Piperci",
+        logo:"grb_piperci.webp",
+        ou:0, p:0, n:0, i:0,
+        gf:0, ga:0, gr:0, bod:0,
+        order:8
+    },
+    {
+        name:"Sava (Gradac)",
+        logo:"grb_sava.webp",
+        ou:0, p:0, n:0, i:0,
+        gf:0, ga:0, gr:0, bod:0,
+        order:9
+    },
+    {
+        name:"Omladinac (G. Čađavica)",
+        logo:"grb_omladinac.webp",
+        ou:1, p:0, n:0, i:1,
+        gf:2, ga:5, gr:-3, bod:0,
+        order:10
+    },
+    {
+        name:"Sloga (Dazdarevo)",
+        logo:"grb_sloga_dazdarevo.webp",
+        ou:2, p:0, n:0, i:2,
+        gf:1, ga:3, gr:-2, bod:0,
+        order:11
+    },
+    {
+        name:"Sloga 94 (Bijeljina)",
+        logo:"grb_sloga94.webp",
+        ou:2, p:0, n:0, i:2,
+        gf:2, ga:4, gr:-2, bod:0,
+        order:12
+    }
 ];
-
-
 function renderTable(id,short=false){
 
     const el=document.getElementById(id);
@@ -3244,8 +3341,8 @@ const players = [
         birth:"10.02.1986.",
         joined:"08.09.2023.",
         position:"GOLMAN",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:0,
         yellow:0,
@@ -3257,8 +3354,8 @@ const players = [
         birth:"31.10.2002.",
         joined:"08.09.2023.",
         position:"VEZNI",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:0,
         yellow:0,
@@ -3270,8 +3367,8 @@ const players = [
         birth:"20.03.1998.",
         joined:"08.09.2023.",
         position:"VEZNI",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:0,
         yellow:0,
@@ -3283,8 +3380,8 @@ const players = [
         birth:"18.04.1984.",
         joined:"31.08.2000.",
         position:"ODBRANA",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:0,
         yellow:0,
@@ -3296,8 +3393,8 @@ const players = [
         birth:"28.04.1974.",
         joined:"10.08.2011.",
         position:"ODBRANA",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:0,
         yellow:1,
@@ -3323,7 +3420,7 @@ const players = [
         joined:"22.08.2025.",
         position:"ODBRANA",
         appearances:0,
-        minutes:0,
+        minutes:90,
         goals:0,
         assists:0,
         yellow:0,
@@ -3335,8 +3432,8 @@ const players = [
         birth:"06.10.1991.",
         joined:"06.02.2026.",
         position:"NAPAD",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:0,
         yellow:0,
@@ -3361,8 +3458,8 @@ const players = [
         birth:"05.02.2002.",
         joined:"08.09.2023.",
         position:"ODBRANA",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:0,
         yellow:0,
@@ -3426,8 +3523,8 @@ const players = [
         birth:"02.03.1996.",
         joined:"08.09.2023.",
         position:"VEZNI",
-        appearances:1,
-        minutes:5,
+        appearances:2,
+        minutes:95,
         goals:0,
         assists:0,
         yellow:0,
@@ -3491,7 +3588,7 @@ const players = [
         birth:"27.06.1992.",
         joined:"08.09.2023.",
         position:"ODBRANA",
-        appearances:1,
+        appearances:2,
         minutes:0,
         goals:0,
         assists:0,
@@ -3504,8 +3601,8 @@ const players = [
         birth:"08.05.2008.",
         joined:"20.02.2026.",
         position:"ODBRANA",
-        appearances:1,
-        minutes:90,
+        appearances:2,
+        minutes:180,
         goals:0,
         assists:1,
         yellow:0,
@@ -3543,8 +3640,8 @@ const players = [
         birth:"29.01.1983.",
         joined:"26.08.2026.",
         position:"VEZNI",
-        appearances:0,
-        minutes:0,
+        appearances:1,
+        minutes:90,
         goals:0,
         assists:0,
         yellow:0,
@@ -4178,6 +4275,235 @@ function openMatchReport(){
 
                 </div>
             </div>
+
+        </div>
+    `;
+
+    openTab(null,'izvjestaj');
+}
+function openMatchReport2(){
+
+    const container = document.getElementById('izvjestajContent');
+
+    if(!container){
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="match-report-page">
+
+            <div class="report-header">
+                <img
+                    src="grb.webp"
+                    alt="FK Sloboda"
+                    onerror="tryNextExt(this)"
+                >
+
+                <h1>FK SLOBODA DONJI ZAGONI</h1>
+
+                <div class="report-date">
+                    06.09.2026. · 2. Kolo
+                </div>
+            </div>
+
+            <div class="report-score-box">
+
+                <div class="report-teams">
+
+                    <div class="report-team">
+                        <img
+                            src="grb_sloga_dazdarevo.webp"
+                            alt="Sloga Dazdarevo"
+                            onerror="tryNextExt(this)"
+                        >
+                        <span>Sloga (Dazdarevo)</span>
+                    </div>
+
+                    <div class="report-final-score">
+                        0 : 1
+                    </div>
+
+                    <div class="report-team">
+                        <img
+                            src="grb.webp"
+                            alt="FK Sloboda"
+                            onerror="tryNextExt(this)"
+                        >
+                        <span>FK Sloboda</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="report-section">
+
+                <h2>Gol</h2>
+
+                <div class="lineup-list">
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">
+                            Luka Stankić
+                        </div>
+
+                        <div class="lineup-right">
+
+                            <span class="event-tag goal-tag">
+                                ⚽ 25'
+                            </span>
+
+                            <span class="event-tag assist-tag">
+                                🎯 Dražen Petrović
+                            </span>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="report-section">
+
+                <h2>Startna postava</h2>
+
+                <div class="lineup-list">
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Branko Babalj</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Luka Stankić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag goal-tag">⚽ 25'</span>
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Dejan Todorović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Slaviša Stanojević</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Miloš Marković</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Đorđe Jović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag yellow-tag">🟨</span>
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Dražen Petrović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag assist-tag">🎯</span>
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Radislav Stevanović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Marko Galić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Rade Stankić</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                    <div class="lineup-player">
+                        <div class="lineup-left">Žarko Rikanović</div>
+                        <div class="lineup-right">
+                            <span class="event-tag sub-tag">90'</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="report-section">
+
+                <h2>Klupa</h2>
+
+                <div class="lineup-list">
+
+                    <div class="lineup-player bench-player">
+
+                        <div class="lineup-left">
+                            Siniša Đokić
+                        </div>
+
+                        <div class="lineup-right">
+
+                            <span class="event-tag sub-tag">
+                                0'
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="report-section">
+
+                <h2>Sažetak</h2>
+
+                <p style="line-height:1.8;">
+                    FK Sloboda Donji Zagoni upisala je novu pobjedu
+                    i sa gostovanja iz Dazdareva odnijela sva tri boda.
+                    Jedini pogodak postigao je Luka Stankić u 25. minuti,
+                    nakon asistencije Dražena Petrovića.
+                </p>
+
+                <p style="line-height:1.8;">
+                    Sloboda je sačuvala svoju mrežu i nakon dva kola
+                    ima maksimalnih šest bodova.
+                </p>
+
+            </div>
+
+            <button
+                class="report-back"
+                onclick="openTab(null,'rezultati')"
+            >
+                ← Nazad na rezultate
+            </button>
 
         </div>
     `;
