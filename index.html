@@ -2400,18 +2400,13 @@ async function fetchFolder(path){
 
 function formatDate(value){
     if(!value){
-        return 'Datum nije unesen';
-    }
-
-    // Ako je vrijednost već običan tekst/string koji nije standardni datum, vrati ga direktno
-    if(typeof value === 'string' && !value.includes('-') && !value.includes('/')) {
-        return value;
+        return '';
     }
 
     const d = new Date(value);
 
     if(isNaN(d)){
-        return value; // Vrati originalni tekst iz CMS-a umjesto da ostane prazno
+        return '';
     }
 
     const dd   = String(d.getDate()).padStart(2,'0');
@@ -2420,6 +2415,7 @@ function formatDate(value){
 
     return `${dd}.${mm}.${yyyy}.`;
 }
+
 
 // Vrlo jednostavan pretvarač iz Markdown-a (kako ga piše markdown
 // widget u admin panelu) u HTML, za tekstove vijesti i izvještaja.
@@ -2485,7 +2481,6 @@ function simpleMarkdown(md){
 
 
 async function loadSiteData(){
-
 const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = await Promise.all([
         fetchFolder('sadrzaj/klubovi'),
         fetchFolder('sadrzaj/tabela'),
@@ -2494,7 +2489,6 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
         fetchFolder('sadrzaj/utakmice'),
         fetchFolder('sadrzaj/rezultati'),
     ]);
-
     // Mapa: naziv kluba -> putanja do grba
     const klubLogo = {};
     klubovi.forEach(k=>{
@@ -2522,7 +2516,28 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
         };
     });
 
-matches = utakmiceRaw.map(u=>({
+ // UTAKMICE I REZULTATI
+    matches = utakmiceRaw.map(u=>{
+        // Pronađi da li postoji unesen rezultat za ovog protivnika/utakmicu
+        const rez = rezultatiRaw.find(r => r.match_title === u.opponent);
+        
+        const score = rez ? rez.score : (u.score || '');
+        const reportText = rez ? rez.report_text : (u.report_text || '');
+        const playerStats = rez && Array.isArray(rez.player_stats) ? rez.player_stats : (u.player_stats || []);
+        
+        return {
+            opponent: u.opponent,
+            opponentLogo: klubLogo[u.opponent] || NAS_KLUB_GRB,
+            date: u.date,
+            venue: u.venue,
+            round: Number(u.round) || 0,
+            isPlayed: !!score, // Automatski postaje odigrana čim upišeš rezultat!
+            score: score,
+            reportText: reportText,
+            playerStats: playerStats
+        };
+    }).sort((a, b) => a.round - b.round);
+
     // IGRAČI (osnovna/korigovana statistika iz "Igrači" + zbir iz odigranih utakmica)
     const playedMatches = matches.filter(m=>m.isPlayed);
 
@@ -3544,25 +3559,47 @@ function openMatchReport(matchIndex){
     const rightName = home ? m.opponent      : NAS_KLUB_KRATKO;
     const rightLogo = home ? m.opponentLogo  : NAS_KLUB_GRB;
 
-    const lineupRows = m.playerStats.map(ps => {
-        const goals   = Number(ps.goals) || 0;
-        const assists = Number(ps.assists) || 0;
-        const yellow  = Number(ps.yellow_cards) || 0;
-        const minutes = Number(ps.minutes) || 0;
+    // Razdvajanje na startnu postavu i klupu na osnovu unosa (pretpostavićemo da ima polje status ili da su prva 11 startna, ali najbolje je preko polja)
+    const starters = m.playerStats.filter(ps => ps.status === 'Startna postava' || !ps.status);
+    const substitutes = m.playerStats.filter(ps => ps.status === 'Klupa');
 
-        return `
-            <div class="lineup-player">
-                <div class="lineup-left">${escapeHtml(ps.player || '')}</div>
-                <div class="lineup-right">
-                    ${goals > 0 ? `<span class="event-tag goal-tag">${'⚽'.repeat(Math.min(goals,5))}</span>` : ''}
-                    ${assists > 0 ? `<span class="event-tag assist-tag">${'🎯'.repeat(Math.min(assists,5))}</span>` : ''}
-                    ${yellow > 0 ? `<span class="event-tag yellow-tag">🟨${yellow > 1 ? '×'+yellow : ''}</span>` : ''}
-                    ${ps.red_card ? `<span class="event-tag out-tag">🟥</span>` : ''}
-                    <span class="event-tag sub-tag">${minutes}'</span>
+    function renderPlayerList(list, title) {
+        if (!list.length) return '';
+        
+        let html = `<h3 style="color:#004488; margin: 15px 0 8px; font-size: 1.1em; border-bottom: 1px solid #eee; padding-bottom: 4px;">${title}</h3>`;
+        html += '<div class="lineup-list">';
+        
+        list.forEach(ps => {
+            const goals   = Number(ps.goals) || 0;
+            const assists = Number(ps.assists) || 0;
+            const yellow  = Number(ps.yellow_cards) || 0;
+            const minutes = Number(ps.minutes) || 0;
+            
+            // Oznaka za izmenu (npr. izlazak/ulazak ili tekstualna napomena)
+            let subTag = '';
+            if(ps.subbed_out) {
+                subTag += ` <span class="event-tag" style="color:#d9534f;" title="Izašao iz igre">⬇️ ${ps.subbed_out}'</span>`;
+            }
+            if(ps.subbed_in) {
+                subTag += ` <span class="event-tag" style="color:#5cb85c;" title="Ušao u igru">⬆️ ${ps.subbed_in}'</span>`;
+            }
+
+            html += `
+                <div class="lineup-player">
+                    <div class="lineup-left">${escapeHtml(ps.player || '')} ${subTag}</div>
+                    <div class="lineup-right">
+                        ${goals > 0 ? `<span class="event-tag goal-tag">${'⚽'.repeat(Math.min(goals,5))}</span>` : ''}
+                        ${assists > 0 ? `<span class="event-tag assist-tag">${'🎯'.repeat(Math.min(assists,5))}</span>` : ''}
+                        ${yellow > 0 ? `<span class="event-tag yellow-tag">🟨${yellow > 1 ? '×'+yellow : ''}</span>` : ''}
+                        ${ps.red_card ? `<span class="event-tag out-tag">🟥</span>` : ''}
+                        <span class="event-tag sub-tag">${minutes > 0 ? minutes + "'" : ''}</span>
+                    </div>
                 </div>
-            </div>
-        `;
-    }).join('');
+            `;
+        });
+        html += '</div>';
+        return html;
+    }
 
     container.innerHTML = `
         <div class="match-report-page">
@@ -3591,9 +3628,9 @@ function openMatchReport(matchIndex){
 
             <div class="report-section">
                 <h2>Sastav i statistika</h2>
-                <div class="lineup-list">
-                    ${lineupRows || '<p style="text-align:center;color:#666;">Sastav za ovu utakmicu još nije unesen.</p>'}
-                </div>
+                ${m.playerStats && m.playerStats.length > 0 ? 
+                    renderPlayerList(starters, 'Startna postava') + renderPlayerList(substitutes, 'Rezerve (Klupa)') 
+                    : '<p style="text-align:center;color:#666;">Sastav za ovu utakmicu još nije unesen.</p>'}
             </div>
 
             ${m.reportText ? `
