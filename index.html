@@ -2523,12 +2523,12 @@ async function loadSiteData(){
         opponentLogo: klubLogo[u.opponent] || NAS_KLUB_GRB,
         date: u.date,
         venue: u.venue,
-        round: u.round,
+        round: Number(u.round) || 0,
         isPlayed: !!u.is_played,
         score: u.score || '',
         reportText: u.report_text || '',
         playerStats: Array.isArray(u.player_stats) ? u.player_stats : []
-    }));
+    })).sort((a, b) => a.round - b.round);
 
     // IGRAČI (osnovna/korigovana statistika iz "Igrači" + zbir iz odigranih utakmica)
     const playedMatches = matches.filter(m=>m.isPlayed);
