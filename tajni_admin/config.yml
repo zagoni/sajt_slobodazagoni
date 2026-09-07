@@ -6,9 +6,9 @@ media_folder: "slike"
 public_folder: "/slike"
 
 collections:
-  # 1. UTKMICE, RASPORED I IZVJEŠTAJI
+  # 1. RASPORED UTAKMICA (Samo najava meča: datum, kolo, protivnik, domaćin/gost)
   - name: "utakmice"
-    label: "Utakmice i Raspored"
+    label: "Raspored utakmica"
     folder: "sadrzaj/utakmice"
     create: true
     format: "json"
@@ -26,8 +26,27 @@ collections:
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
       - { label: "Kolo", name: "round", widget: "number", default: 1 }
 
-      # SASTAV IGRAČA (Dostupno ODMAH, i za utakmice koje nisu odigrane)
-      - label: "Sastav igrača za utakmicu"
+  # 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča: rezultat, izvještaj i učinak igrača)
+  - name: "rezultati"
+    label: "Rezultati i Izvještaji"
+    folder: "sadrzaj/rezultati"
+    create: true
+    format: "json"
+    identifier_field: "match_title"
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}"
+    fields:
+      - label: "Izaberi utakmicu / Protivnika"
+        name: "match_title"
+        widget: "relation"
+        collection: "utakmice"
+        search_fields: ["opponent"]
+        value_field: "opponent"
+        display_fields: ["opponent"]
+      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
+      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
+      
+      # Sastav i učinak igrača unosi se OVDJE, nakon odigranog meča
+      - label: "Učinak igrača na ovoj utakmici"
         name: "player_stats"
         widget: "list"
         required: false
@@ -45,12 +64,7 @@ collections:
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
-      # Polja za odigranu utakmicu (Popunjava se NAKON meča)
-      - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
-      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
-      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
-
-  # 2. KLUBOVI U LIGI
+  # 3. KLUBOVI U LIGI
   - name: "klubovi"
     label: "Klubovi u ligi"
     folder: "sadrzaj/klubovi"
@@ -63,7 +77,7 @@ collections:
       - { label: "Naziv kluba", name: "title", widget: "string" }
       - { label: "Grb kluba", name: "logo", widget: "image", required: false }
 
-  # 3. TABELA LIGE
+  # 4. TABELA LIGE
   - name: "tabela"
     label: "Tabela Lige"
     folder: "sadrzaj/tabela"
@@ -87,7 +101,7 @@ collections:
       - { label: "Primljeni golovi", name: "goals_against", widget: "number", default: 0 }
       - { label: "Bodovi", name: "points", widget: "number", default: 0 }
 
-  # 4. VIJESTI
+  # 5. VIJESTI
   - name: "vijesti"
     label: "Vijesti"
     folder: "sadrzaj/vijesti"
@@ -101,7 +115,7 @@ collections:
       - { label: "Kratak opis (za početnu stranu)", name: "summary", widget: "text" }
       - { label: "Glavni sadržaj / Tekst", name: "body", widget: "markdown" }
 
-  # 5. IGRAČI (ROSTER I POČETNA/KORIGOVANA STATISTIKA)
+  # 6. IGRAČI (ROSTER I POČETNA/KORIGOVANA STATISTIKA)
   - name: "igraci"
     label: "Igrači"
     folder: "sadrzaj/igraci"
