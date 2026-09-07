@@ -1,0 +1,130 @@
+{
+  "round": 1,
+  "player_stats": [
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branko Babalj"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 1,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Đorđe Jović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dražen Petrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 1,
+      "red_card": false,
+      "player": "Radislav Stevanović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Miloš Marković"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Luka Stankić"
+    },
+    {
+      "minutes": 50,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Miroslav Jović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dejan Todorović"
+    },
+    {
+      "minutes": 90,
+      "goals": 2,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Rajko Đorđić"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 1,
+      "red_card": false,
+      "player": "Slaviša Stanojević"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 1,
+      "red_card": false,
+      "player": "Darko Maksimović"
+    },
+    {
+      "minutes": 35,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Darko Perić"
+    },
+    {
+      "minutes": 5,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Marko Galić"
+    },
+    {
+      "minutes": 0,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branimir Pantić"
+    },
+    {
+      "minutes": 0,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Siniša Đokić"
+    }
+  ],
+  "is_played": false,
+  "opponent": "Koridor Bijeljina",
+  "venue": "Domaćin",
+  "date": "2026-08-30T14:00:00.000+02:00",
+  "score": "2:1"
+}
