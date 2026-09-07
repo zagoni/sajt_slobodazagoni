@@ -30,22 +30,22 @@ collections:
       - { label: "Datum i vrijeme", name: "date", widget: "string" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
 
-  # 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča)
+# 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča)
   - name: "rezultati"
     label: "Rezultati i Izvještaji"
     folder: "sadrzaj/rezultati"
     create: true
     format: "json"
-    identifier_field: "match_title"
-    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}"
+    identifier_field: "match_round"
+    slug: "kolo-{{match_round}}-rezultat"
     fields:
-      - label: "Izaberi utakmicu / Protivnika"
-        name: "match_title"
+      - label: "Izaberi kolo utakmice"
+        name: "match_round"
         widget: "relation"
         collection: "utakmice"
-        search_fields: ["opponent"]
-        value_field: "opponent"
-        display_fields: ["opponent"]
+        search_fields: ["round", "opponent"]
+        value_field: "round"
+        display_fields: ["round", "opponent"]
       - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
       - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
       
@@ -94,7 +94,6 @@ collections:
           - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
-
   # 3. KLUBOVI U LIGI
   - name: "klubovi"
     label: "Klubovi u ligi"
