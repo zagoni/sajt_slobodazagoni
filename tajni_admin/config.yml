@@ -22,7 +22,7 @@ collections:
         search_fields: ["title"]
         value_field: "title"
         display_fields: ["title"]
-      - { label: "Datum i vrijeme", name: "date", widget: "datetime" }
+      - { label: "Datum i vrijeme", name: "date", widget: "string" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
       - { label: "Kolo", name: "round", widget: "number", default: 1 }
 
