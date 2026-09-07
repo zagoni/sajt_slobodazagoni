@@ -1,0 +1,104 @@
+{
+  "starting_lineup": [
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branko Babalj"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branko Babalj"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Aleksandar Petrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branimir Pantić"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Darko Maksimović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Darko Maksimović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branko Babalj"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branimir Pantić"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branimir Pantić"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branimir Pantić"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Aleksandar Petrović"
+    }
+  ],
+  "substitutes": [
+    {
+      "minute_in": 0,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branko Babalj"
+    }
+  ],
+  "match_title": "Sloga Dazdarevo",
+  "score": "0:1"
+}
