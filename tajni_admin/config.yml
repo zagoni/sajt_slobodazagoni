@@ -68,19 +68,27 @@ collections:
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
-      # Igrači na klupi
+      # Igrači na klupi (sa opcijom da se izabere koga je zamijenio)
       - label: "Igrači na klupi"
         name: "substitutes"
         widget: "list"
         required: false
         fields:
-          - label: "Izaberi igrača"
+          - label: "Izaberi igrača (koji ulazi)"
             name: "player"
             widget: "relation"
             collection: "igraci"
             search_fields: ["title"]
             value_field: "title"
             display_fields: ["title"]
+          - label: "Zamijenio igrača (koji je izašao)"
+            name: "subbed_for"
+            widget: "relation"
+            collection: "igraci"
+            search_fields: ["title"]
+            value_field: "title"
+            display_fields: ["title"]
+            required: false
           - { label: "Minut ulaska u igru", name: "minute_in", widget: "number", required: false, default: 0 }
           - { label: "Golovi", name: "goals", widget: "number", default: 0 }
           - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
