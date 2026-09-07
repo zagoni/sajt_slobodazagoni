@@ -6,7 +6,7 @@ media_folder: "slike"
 public_folder: "/slike"
 
 collections:
-# 1. RASPORED UTAKMICA (Samo najava meča: datum, kolo, protivnik, domaćin/gost)
+  # 1. RASPORED UTAKMICA (Samo najava meča: kolo, protivnik, datum, domaćin/gost)
   - name: "utakmice"
     label: "Raspored utakmica"
     folder: "sadrzaj/utakmice"
@@ -14,7 +14,7 @@ collections:
     format: "json"
     identifier_field: "round"
     slug: "kolo-{{round}}"
-    sortable_fields: ["round", "date"]
+    sortable_fields: ["round"]
     view_default_sort:
       field: "round"
       direction: "ascending"
@@ -30,7 +30,7 @@ collections:
       - { label: "Datum i vrijeme", name: "date", widget: "string" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
 
-  # 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča: rezultat, izvještaj i učinak igrača)
+  # 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča)
   - name: "rezultati"
     label: "Rezultati i Izvještaji"
     folder: "sadrzaj/rezultati"
@@ -49,7 +49,7 @@ collections:
       - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
       - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
       
-      # Sastav i učinak igrača unosi se OVDJE, nakon odigranog meča
+      # Učinak igrača nakon odigranog meča
       - label: "Učinak igrača na ovoj utakmici"
         name: "player_stats"
         widget: "list"
@@ -119,7 +119,7 @@ collections:
       - { label: "Kratak opis (za početnu stranu)", name: "summary", widget: "text" }
       - { label: "Glavni sadržaj / Tekst", name: "body", widget: "markdown" }
 
-  # 6. IGRAČI (ROSTER I POČETNA/KORIGOVANA STATISTIKA)
+  # 6. IGRAČI
   - name: "igraci"
     label: "Igrači"
     folder: "sadrzaj/igraci"
