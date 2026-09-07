@@ -12,9 +12,9 @@
       "minutes": 90,
       "goals": 0,
       "assists": 0,
-      "yellow_cards": 0,
+      "yellow_cards": 1,
       "red_card": false,
-      "player": "Branko Babalj"
+      "player": "Đorđe Jović"
     },
     {
       "minutes": 90,
@@ -22,7 +22,15 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Aleksandar Petrović"
+      "player": "Radislav Stevanović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 1,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dražen Petrović"
     },
     {
       "minutes": 90,
@@ -30,7 +38,15 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Branimir Pantić"
+      "player": "Miloš Marković"
+    },
+    {
+      "minutes": 90,
+      "goals": 1,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Luka Stankić"
     },
     {
       "minutes": 90,
@@ -38,7 +54,7 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Darko Maksimović"
+      "player": "Žarko Rikanović"
     },
     {
       "minutes": 90,
@@ -46,7 +62,7 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Darko Maksimović"
+      "player": "Dejan Todorović"
     },
     {
       "minutes": 90,
@@ -54,7 +70,7 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Branko Babalj"
+      "player": "Rade Stankić"
     },
     {
       "minutes": 90,
@@ -62,7 +78,7 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Branimir Pantić"
+      "player": "Marko Galić"
     },
     {
       "minutes": 90,
@@ -70,23 +86,7 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Branimir Pantić"
-    },
-    {
-      "minutes": 90,
-      "goals": 0,
-      "assists": 0,
-      "yellow_cards": 0,
-      "red_card": false,
-      "player": "Branimir Pantić"
-    },
-    {
-      "minutes": 90,
-      "goals": 0,
-      "assists": 0,
-      "yellow_cards": 0,
-      "red_card": false,
-      "player": "Aleksandar Petrović"
+      "player": "Slaviša Stanojević"
     }
   ],
   "substitutes": [
@@ -96,7 +96,7 @@
       "assists": 0,
       "yellow_cards": 0,
       "red_card": false,
-      "player": "Branko Babalj"
+      "player": "Siniša Đokić"
     }
   ],
   "match_title": "Sloga Dazdarevo",
