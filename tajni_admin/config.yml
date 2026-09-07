@@ -30,7 +30,7 @@ collections:
       - { label: "Datum i vrijeme", name: "date", widget: "string" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
 
-# 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča - opcioni igrači, stabilni fajlovi)
+  # 2. REZULTATI I IZVJEŠTAJI
   - name: "rezultati"
     label: "Rezultati i Izvještaji"
     folder: "sadrzaj/rezultati"
@@ -49,7 +49,7 @@ collections:
       - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
       - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
       
-      # Startna postava (opcionalno - ne moraš popunjavati ako nećeš)
+      # Startna postava (opcionalno)
       - label: "Startna postava"
         name: "starting_lineup"
         widget: "list"
@@ -68,7 +68,7 @@ collections:
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
-      # Igrači na klupi i izmjene (opcionalno - ne moraš popunjavati ako nećeš)
+      # Igrači na klupi i izmjene (opcionalno)
       - label: "Igrači na klupi"
         name: "substitutes"
         widget: "list"
