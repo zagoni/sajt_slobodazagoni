@@ -58,6 +58,7 @@ collections:
     format: "json"
     slug: "{{slug}}"
     identifier_field: "title"
+summary: "{{title}}
     fields:
       - { label: "Naziv kluba", name: "title", widget: "string" }
       - { label: "Grb kluba", name: "logo", widget: "image", required: false }
