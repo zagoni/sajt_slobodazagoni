@@ -6,15 +6,20 @@ media_folder: "slike"
 public_folder: "/slike"
 
 collections:
-  # 1. RASPORED UTAKMICA (Samo najava meča: datum, kolo, protivnik, domaćin/gost)
+# 1. RASPORED UTAKMICA (Samo najava meča: datum, kolo, protivnik, domaćin/gost)
   - name: "utakmice"
     label: "Raspored utakmica"
     folder: "sadrzaj/utakmice"
     create: true
     format: "json"
-    identifier_field: "opponent"
-    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}"
+    identifier_field: "round"
+    slug: "kolo-{{round}}"
+    sortable_fields: ["round", "date"]
+    view_default_sort:
+      field: "round"
+      direction: "ascending"
     fields:
+      - { label: "Kolo", name: "round", widget: "number", default: 1 }
       - label: "Protivnik"
         name: "opponent"
         widget: "relation"
@@ -24,7 +29,6 @@ collections:
         display_fields: ["title"]
       - { label: "Datum i vrijeme", name: "date", widget: "string" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
-      - { label: "Kolo", name: "round", widget: "number", default: 1 }
 
   # 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča: rezultat, izvještaj i učinak igrača)
   - name: "rezultati"
