@@ -11,7 +11,9 @@ collections:
     label: "Utakmice i Raspored"
     folder: "sadrzaj/utakmice"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    format: "json"
+    identifier_field: "opponent"
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}"
     fields:
       - label: "Protivnik"
         name: "opponent"
@@ -42,7 +44,7 @@ collections:
           - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
-      
+
       # Polja za odigranu utakmicu (Popunjava se NAKON meča)
       - { label: "Odigrana utakmica?", name: "is_played", widget: "boolean", default: false }
       - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string", required: false }
@@ -53,6 +55,7 @@ collections:
     label: "Klubovi u ligi"
     folder: "sadrzaj/klubovi"
     create: true
+    format: "json"
     slug: "{{slug}}"
     identifier_field: "title"
     fields:
@@ -64,7 +67,8 @@ collections:
     label: "Tabela Lige"
     folder: "sadrzaj/tabela"
     create: true
-    slug: "{{slug}}"
+    format: "json"
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}"
     identifier_field: "title"
     fields:
       - label: "Naziv kluba"
@@ -87,6 +91,7 @@ collections:
     label: "Vijesti"
     folder: "sadrzaj/vijesti"
     create: true
+    format: "json"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Naslov", name: "title", widget: "string" }
@@ -100,6 +105,7 @@ collections:
     label: "Igrači"
     folder: "sadrzaj/igraci"
     create: true
+    format: "json"
     slug: "{{slug}}"
     identifier_field: "title"
     fields:
