@@ -37,8 +37,13 @@ collections:
     create: true
     format: "json"
     identifier_field: "match_title"
+    summary: "Kolo {{round}} — {{match_title}}"
     slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}"
     fields:
+      - label: "Kolo (MORA se poklapati sa brojem kola iz Rasporeda)"
+        name: "round"
+        widget: "number"
+        hint: "Upiši isti broj kola koji ta utakmica ima u \"Raspored utakmica\" - po ovome sajt zna koji rezultat ide uz koju utakmicu."
       - label: "Izaberi utakmicu / Protivnika"
         name: "match_title"
         widget: "relation"
@@ -166,4 +171,4 @@ collections:
       - { label: "Početni/Korigovani golovi", name: "base_goals", widget: "number", default: 0 }
       - { label: "Početne/Korigovane asistencije", name: "base_assists", widget: "number", default: 0 }
       - { label: "Početni žuti kartoni", name: "base_yellow_cards", widget: "number", default: 0 }
-      - { label: "Početni crveni kartoni", name: "base_red_cards", widget: "number", default: 0 }sss
+      - { label: "Početni crveni kartoni", name: "base_red_cards", widget: "number", default: 0 }
