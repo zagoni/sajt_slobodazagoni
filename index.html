@@ -2486,12 +2486,13 @@ function simpleMarkdown(md){
 
 async function loadSiteData(){
 
-    const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw] = await Promise.all([
+const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = await Promise.all([
         fetchFolder('sadrzaj/klubovi'),
         fetchFolder('sadrzaj/tabela'),
         fetchFolder('sadrzaj/igraci'),
         fetchFolder('sadrzaj/vijesti'),
         fetchFolder('sadrzaj/utakmice'),
+        fetchFolder('sadrzaj/rezultati'),
     ]);
 
     // Mapa: naziv kluba -> putanja do grba
@@ -2521,19 +2522,7 @@ async function loadSiteData(){
         };
     });
 
-    // UTAKMICE
-    matches = utakmiceRaw.map(u=>({
-        opponent: u.opponent,
-        opponentLogo: klubLogo[u.opponent] || NAS_KLUB_GRB,
-        date: u.date,
-        venue: u.venue,
-        round: Number(u.round) || 0,
-        isPlayed: !!u.is_played,
-        score: u.score || '',
-        reportText: u.report_text || '',
-        playerStats: Array.isArray(u.player_stats) ? u.player_stats : []
-    })).sort((a, b) => a.round - b.round);
-
+matches = utakmiceRaw.map(u=>({
     // IGRAČI (osnovna/korigovana statistika iz "Igrači" + zbir iz odigranih utakmica)
     const playedMatches = matches.filter(m=>m.isPlayed);
 
