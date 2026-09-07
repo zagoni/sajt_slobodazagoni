@@ -49,9 +49,9 @@ collections:
       - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
       - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
       
-      # Učinak igrača nakon odigranog meča
-      - label: "Učinak igrača na ovoj utakmici"
-        name: "player_stats"
+      # Startna postava
+      - label: "Startna postava"
+        name: "starting_lineup"
         widget: "list"
         required: false
         fields:
@@ -62,7 +62,26 @@ collections:
             search_fields: ["title"]
             value_field: "title"
             display_fields: ["title"]
-          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 0 }
+          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 }
+          - { label: "Golovi", name: "goals", widget: "number", default: 0 }
+          - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
+          - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
+          - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
+
+      # Igrači na klupi
+      - label: "Igrači na klupi"
+        name: "substitutes"
+        widget: "list"
+        required: false
+        fields:
+          - label: "Izaberi igrača"
+            name: "player"
+            widget: "relation"
+            collection: "igraci"
+            search_fields: ["title"]
+            value_field: "title"
+            display_fields: ["title"]
+          - { label: "Minut ulaska u igru", name: "minute_in", widget: "number", required: false, default: 0 }
           - { label: "Golovi", name: "goals", widget: "number", default: 0 }
           - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
           - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
