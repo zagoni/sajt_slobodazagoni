@@ -29,7 +29,8 @@ collections:
         display_fields: ["title"]
       - { label: "Datum i vrijeme", name: "date", widget: "string" }
       - { label: "Domaćin ili Gost", name: "venue", widget: "select", options: ["Domaćin", "Gost"] }
-# 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča)
+
+  # 2. REZULTATI I IZVJEŠTAJI (Popunjava se NAKON meča)
   - name: "rezultati"
     label: "Rezultati i Izvještaji"
     folder: "sadrzaj/rezultati"
@@ -45,8 +46,8 @@ collections:
         search_fields: ["round", "opponent"]
         value_field: "round"
         display_fields: ["round", "opponent"]
-      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" },
-      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false },
+      - { label: "Rezultat (npr. 2:1)", name: "score", widget: "string" }
+      - { label: "Tekst izvještaja sa utakmice", name: "report_text", widget: "markdown", required: false }
       
       # Startna postava
       - label: "Startna postava"
@@ -61,10 +62,10 @@ collections:
             search_fields: ["title"]
             value_field: "title"
             display_fields: ["title"]
-          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 },
-          - { label: "Golovi", name: "goals", widget: "number", default: 0 },
-          - { label: "Asistencije", name: "assists", widget: "number", default: 0 },
-          - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 },
+          - { label: "Minuti na terenu", name: "minutes", widget: "number", default: 90 }
+          - { label: "Golovi", name: "goals", widget: "number", default: 0 }
+          - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
+          - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
 
       # Igrači na klupi i izmjene
@@ -86,13 +87,14 @@ collections:
             collection: "igraci"
             search_fields: ["title"]
             value_field: "title"
-            display_fields: ["title"],
+            display_fields: ["title"]
             required: false
-          - { label: "Minut ulaska u igru", name: "minute_in", widget: "number", required: false, default: 0 },
-          - { label: "Golovi", name: "goals", widget: "number", default: 0 },
-          - { label: "Asistencije", name: "assists", widget: "number", default: 0 },
-          - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 },
+          - { label: "Minut ulaska u igru", name: "minute_in", widget: "number", required: false, default: 0 }
+          - { label: "Golovi", name: "goals", widget: "number", default: 0 }
+          - { label: "Asistencije", name: "assists", widget: "number", default: 0 }
+          - { label: "Žuti kartoni", name: "yellow_cards", widget: "number", default: 0 }
           - { label: "Crveni karton", name: "red_card", widget: "boolean", default: false }
+
   # 3. KLUBOVI U LIGI
   - name: "klubovi"
     label: "Klubovi u ligi"
