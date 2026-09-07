@@ -2400,13 +2400,18 @@ async function fetchFolder(path){
 
 function formatDate(value){
     if(!value){
-        return '';
+        return 'Datum nije unesen';
+    }
+
+    // Ako je vrijednost već običan tekst/string koji nije standardni datum, vrati ga direktno
+    if(typeof value === 'string' && !value.includes('-') && !value.includes('/')) {
+        return value;
     }
 
     const d = new Date(value);
 
     if(isNaN(d)){
-        return '';
+        return value; // Vrati originalni tekst iz CMS-a umjesto da ostane prazno
     }
 
     const dd   = String(d.getDate()).padStart(2,'0');
@@ -2415,7 +2420,6 @@ function formatDate(value){
 
     return `${dd}.${mm}.${yyyy}.`;
 }
-
 
 // Vrlo jednostavan pretvarač iz Markdown-a (kako ga piše markdown
 // widget u admin panelu) u HTML, za tekstove vijesti i izvještaja.
