@@ -8,5 +8,153 @@
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <!-- ===========================================================
+       PRILAGOĐENO POLJE: "Broj dresa" bira samo slobodne brojeve
+       (koristi se u config.yml preko widget: "broj-dresa" za
+       kolekciju "Igrači")
+  =========================================================== -->
+  <script>
+  (function(){
+
+    var GITHUB_USER   = "zagoni";
+    var GITHUB_REPO   = "sajt_slobodazagoni";
+    var GITHUB_BRANCH = "main";
+    var MAX_BROJ_DRESA = 99; // po potrebi promijeni gornju granicu brojeva
+
+    var BrojDresaControl = createClass({
+
+      getInitialState: function(){
+        return { loading: true, taken: [], error: null };
+      },
+
+      componentDidMount: function(){
+        this.loadTakenNumbers();
+      },
+
+      loadTakenNumbers: function(){
+        var self = this;
+
+        // Slug igrača kojeg trenutno uređuješ - da ga isključimo iz
+        // provjere, jer njegov postojeći broj ne smije da izgleda kao
+        // "zauzet od strane nekog drugog".
+        var currentSlug = null;
+        try{
+          currentSlug = this.props.entry.get('slug');
+        }catch(e){}
+
+        var listUrl =
+          "https://api.github.com/repos/" + GITHUB_USER + "/" + GITHUB_REPO +
+          "/contents/sadrzaj/igraci?ref=" + GITHUB_BRANCH;
+
+        fetch(listUrl)
+          .then(function(res){ return res.ok ? res.json() : []; })
+          .then(function(files){
+
+            if(!Array.isArray(files)){
+              return [];
+            }
+
+            var jsonFiles = files.filter(function(f){
+              return f.name && f.name.slice(-5) === '.json';
+            });
+
+            return Promise.all(
+              jsonFiles.map(function(f){
+
+                var slug = f.name.replace(/\.json$/, '');
+
+                if(currentSlug && slug === currentSlug){
+                  return null; // preskoči samog sebe
+                }
+
+                return fetch(f.download_url)
+                  .then(function(r){ return r.json(); })
+                  .catch(function(){ return null; });
+
+              })
+            );
+
+          })
+          .then(function(players){
+
+            var taken = (players || [])
+              .filter(Boolean)
+              .map(function(p){ return Number(p.number); })
+              .filter(function(n){ return !isNaN(n) && n > 0; });
+
+            self.setState({ loading: false, taken: taken });
+
+          })
+          .catch(function(){
+            self.setState({
+              loading: false,
+              error: "Nije uspjelo učitavanje zauzetih brojeva sa sajta - provjeri internet konekciju."
+            });
+          });
+      },
+
+      handleChange: function(e){
+        var val = e.target.value;
+        this.props.onChange(val === '' ? '' : Number(val));
+      },
+
+      render: function(){
+
+        var props = this.props;
+        var state = this.state;
+
+        if(state.loading){
+          return h('div', { style:{ padding:'8px 0', color:'#666' } }, 'Učitavanje slobodnih brojeva...');
+        }
+
+        var currentValue =
+          (props.value === undefined || props.value === null || props.value === '')
+            ? null
+            : Number(props.value);
+
+        var options = [
+          h('option', { key:'empty', value:'' }, '— izaberi broj —')
+        ];
+
+        for(var n = 1; n <= MAX_BROJ_DRESA; n++){
+
+          var isTaken   = state.taken.indexOf(n) !== -1;
+          var isCurrent = currentValue === n;
+
+          options.push(
+            h('option', {
+              key: n,
+              value: String(n),
+              disabled: isTaken && !isCurrent
+            }, isTaken && !isCurrent ? (n + ' — zauzet') : String(n))
+          );
+
+        }
+
+        return h('div', {},
+          h('select', {
+            value: currentValue === null ? '' : String(currentValue),
+            onChange: this.handleChange,
+            className: props.classNameWrapper,
+            style: { padding:'10px', fontSize:'16px', width:'100%' }
+          }, options),
+          state.error ? h('p', { style:{ color:'#c00', marginTop:'6px' } }, state.error) : null
+        );
+
+      }
+
+    });
+
+    var BrojDresaPreview = createClass({
+      render: function(){
+        return h('p', {}, this.props.value != null ? String(this.props.value) : '');
+      }
+    });
+
+    CMS.registerWidget('broj-dresa', BrojDresaControl, BrojDresaPreview);
+
+  })();
+  </script>
 </body>
 </html>
