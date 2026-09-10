@@ -161,7 +161,7 @@ collections:
     identifier_field: "title"
     fields:
       - { label: "Ime i prezime", name: "title", widget: "string" }
-      - { label: "Broj dresa", name: "number", widget: "number" }
+      - { label: "Broj dresa", name: "number", widget: "broj-dresa", hint: "Lista pokazuje samo slobodne brojeve (ili tvoj trenutni broj ako uređuješ igrača)." }
       - { label: "Pozicija", name: "position", widget: "select", options: ["Golman", "Odbrana", "Vezni", "Napad"] }
       - { label: "Datum rođenja", name: "birth_date", widget: "string", required: false }
       - { label: "U klubu od (godina)", name: "in_club_since", widget: "string", default: "8.9.2023." }
