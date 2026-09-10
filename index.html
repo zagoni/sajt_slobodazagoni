@@ -2674,6 +2674,22 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
             content: simpleMarkdown(v.body || '')
         }));
 
+    // Svakoj vijesti dodaj stabilan "slug" (na osnovu naslova) da bi link
+    // ka toj konkretnoj vijesti mogao da se kopira i pošalje drugima, a da
+    // se ispravno otvori i kad neko drugi klikne na taj link.
+    const usedNewsSlugs = {};
+    newsData.forEach(n=>{
+        let base = slugify(n.title);
+        let slug = base;
+        let i = 2;
+        while(usedNewsSlugs[slug]){
+            slug = base + '-' + i;
+            i++;
+        }
+        usedNewsSlugs[slug] = true;
+        n.slug = slug;
+    });
+
     renderTable('homeTable', true);
     renderTable('fullTable', false);
     renderNewsList();
@@ -2683,6 +2699,32 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
     renderSchedule();
     renderResults();
     renderHomeCards();
+
+    // Ako je neko otvorio stranicu preko linka ka konkretnoj vijesti ili
+    // izvještaju o utakmici (npr. link poslat na Viberu/WhatsApp-u), tek
+    // sada su podaci sa GitHub-a stigli - probaj da otvoriš tačno tu
+    // vijest/izvještaj umjesto praznog taba.
+    resolveDeepLinkFromHash(window.location.hash);
+}
+
+
+// Provjerava da li hash u adresnoj traci pokazuje na konkretnu vijest
+// (#vijest-neki-slug) ili izvještaj utakmice (#izvjestaj-5) i, ako podaci
+// za nju postoje, otvara je. Vraća true ako je nešto otvoreno.
+function resolveDeepLinkFromHash(hash){
+
+    const h = String(hash || '').replace(/^#/, '');
+
+    if(h.indexOf('vijest-') === 0){
+        return openNewsBySlug(h.substring('vijest-'.length));
+    }
+
+    if(h.indexOf('izvjestaj-') === 0){
+        return openMatchReportByRound(h.substring('izvjestaj-'.length));
+    }
+
+    return false;
+
 }
 
 
@@ -2915,22 +2957,46 @@ function escapeHtml(text){
 }
 
 
+// Pretvara naslov vijesti u stabilan "slug" (npr. "Pobjeda u Derbiju!" ->
+// "pobjeda-u-derbiju") koji se koristi u linku za tu vijest, da bi link
+// ostao isti i mogao da se dijeli sa drugima.
+function slugify(text){
+
+    const map = {
+        'č':'c','ć':'c','ž':'z','š':'s','đ':'dj',
+        'Č':'c','Ć':'c','Ž':'z','Š':'s','Đ':'dj'
+    };
+
+    let s = String(text || '').replace(/[čćžšđČĆŽŠĐ]/g, ch => map[ch] || ch);
+
+    s = s.toLowerCase().trim();
+
+    s = s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+
+    return s || 'vijest';
+
+}
+
+
 /* =========================================================
    OTVARANJE VIJESTI (unutar iste stranice)
 ========================================================= */
 
-function openNews(index){
+// updateUrl=true  -> korisnik je kliknuo na vijest, upiši link u adresnu traku
+// updateUrl=false -> stranica se učitava/vraća preko već postojećeg linka,
+//                    samo prikaži sadržaj bez dodavanja nove istorije
+function showNewsArticle(index, updateUrl){
 
     const news = newsData[index];
 
     if(!news){
-        return;
+        return false;
     }
 
     const container = document.getElementById('vijestContent');
 
     if(!container){
-        return;
+        return false;
     }
 
     container.innerHTML = `
@@ -2942,6 +3008,16 @@ function openNews(index){
 
             <div class="article-meta-page">
                 ${escapeHtml(news.date)} · FK Sloboda Donji Zagoni
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <button
+                    class="match-btn"
+                    style="width:auto;display:inline-block;padding:9px 16px;"
+                    onclick="shareNews('${news.slug}',this)"
+                >
+                    🔗 Podijeli vijest
+                </button>
             </div>
 
             <img
@@ -2968,7 +3044,119 @@ function openNews(index){
         </div>
     `;
 
-    openTab(null,'vijest');
+    openTab(null,'vijest',updateUrl,updateUrl?('vijest-'+news.slug):null);
+
+    return true;
+
+}
+
+function openNews(index){
+
+    showNewsArticle(index,true);
+
+}
+
+
+// Kad se link ka konkretnoj vijesti (npr. #vijest-pobjeda-u-derbiju) otvori
+// - bilo pri prvom učitavanju stranice, bilo klikom na "Nazad/Naprijed" -
+// ova funkcija pronalazi tu vijest po slug-u i prikazuje je. Vraća true
+// ako je vijest pronađena i prikazana.
+function openNewsBySlug(slug){
+
+    const idx = newsData.findIndex(n => n.slug === slug);
+
+    if(idx === -1){
+        return false;
+    }
+
+    return showNewsArticle(idx,false);
+
+}
+
+
+/* =========================================================
+   DIJELJENJE LINKA (VIJEST / IZVJEŠTAJ)
+========================================================= */
+
+// Koristi ugrađeno "Podijeli" okno na telefonu (ako postoji), a inače
+// kopira link u clipboard da korisnik može da ga zalijepi u Viber,
+// WhatsApp, Messenger itd.
+async function shareLink(url,title,btn){
+
+    if(navigator.share){
+        try{
+            await navigator.share({ title:title, url:url });
+            return;
+        }catch(e){
+            // Korisnik je otkazao dijeljenje - ne radi ništa dalje
+            return;
+        }
+    }
+
+    copyShareLink(url,btn);
+
+}
+
+function copyShareLink(url,btn){
+
+    const showCopied=()=>{
+
+        if(!btn){
+            return;
+        }
+
+        const original = btn.dataset.originalText || btn.textContent;
+        btn.dataset.originalText = original;
+        btn.textContent = '✅ Link kopiran!';
+
+        setTimeout(()=>{
+            btn.textContent = original;
+        },2000);
+
+    };
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+
+        navigator.clipboard.writeText(url).then(
+            showCopied,
+            ()=>{ prompt('Kopiraj link ka vijesti:',url); }
+        );
+
+    }else{
+
+        prompt('Kopiraj link ka vijesti:',url);
+
+    }
+
+}
+
+function shareNews(slug,btn){
+
+    const news = newsData.find(n => n.slug === slug);
+
+    if(!news){
+        return;
+    }
+
+    const url = new URL(window.location.href);
+    url.hash = 'vijest-' + slug;
+
+    shareLink(url.href,news.title,btn);
+
+}
+
+function shareMatchReport(round,btn){
+
+    const m = matches.find(mm => mm.round === Number(round));
+
+    if(!m){
+        return;
+    }
+
+    const url = new URL(window.location.href);
+    url.hash = 'izvjestaj-' + round;
+
+    shareLink(url.href,'Izvještaj: ' + (m.opponent || ''),btn);
 
 }
 
@@ -3368,7 +3556,8 @@ let currentTab='pocetna';
 function openTab(
     evt,
     tabName,
-    saveHistory=true
+    saveHistory=true,
+    hashOverride=null
 ){
 
     const target=
@@ -3434,9 +3623,10 @@ function openTab(
 
 
     if(saveHistory){
+        const hashValue = hashOverride || tabName;
         const url = new URL(window.location.href);
-        url.hash = tabName;
-        history.pushState({tab:tabName}, '', url.href);
+        url.hash = hashValue;
+        history.pushState({tab:tabName,hash:hashValue}, '', url.href);
     }
 
 
@@ -3453,27 +3643,42 @@ window.addEventListener(
     'popstate',
     function(event){
 
-        let tab='pocetna';
+        let hash='';
 
         if(
             event.state &&
-            event.state.tab
+            event.state.hash
         ){
 
-            tab=
-                event.state.tab;
+            hash=
+                event.state.hash;
 
         }else if(
             window.location.hash
         ){
 
-            tab=
+            hash=
                 window.location.hash
                     .substring(1);
 
         }
 
+        // Ako je "Nazad/Naprijed" vratio korisnika na link konkretne
+        // vijesti ili izvještaja, pokušaj da je prikažeš direktno umjesto
+        // praznog taba.
         if(
+            resolveDeepLinkFromHash(hash)
+        ){
+            return;
+        }
+
+        let tab=
+            hash.indexOf('vijest-')===0 ? 'vijesti' :
+            hash.indexOf('izvjestaj-')===0 ? 'rezultati' :
+            hash;
+
+        if(
+            !tab ||
             !document.getElementById(tab)
         ){
 
@@ -3507,19 +3712,35 @@ window.addEventListener(
             let tabName=
                 hash.substring(1);
 
-            if(
+            // Link ka konkretnoj vijesti (#vijest-...) ili izvještaju
+            // (#izvjestaj-...) - podaci sa GitHub-a se tek učitavaju, pa
+            // za sada samo otvori odgovarajuću listu (Vijesti / Rezultati).
+            // Kad podaci stignu, resolveDeepLinkFromHash() (pozvana na
+            // kraju loadSiteData()) će otvoriti tačnu vijest/izvještaj.
+            const isNewsLink   = tabName.indexOf('vijest-')===0;
+            const isReportLink = tabName.indexOf('izvjestaj-')===0;
+
+            let openTabName = tabName;
+
+            if(isNewsLink){
+                openTabName='vijesti';
+            }else if(isReportLink){
+                openTabName='rezultati';
+            }else if(
                 !document.getElementById(
                     tabName
                 )
             ){
 
+                openTabName='pocetna';
                 tabName='pocetna';
 
             }
 
             history.replaceState(
                 {
-                    tab:tabName
+                    tab:openTabName,
+                    hash:tabName
                 },
                 '',
                 window.location.pathname+
@@ -3529,7 +3750,7 @@ window.addEventListener(
 
             openTab(
                 null,
-                tabName,
+                openTabName,
                 false
             );
 
@@ -3633,13 +3854,13 @@ document.addEventListener(
    IZVJEŠTAJ UTAKMICE (unutar iste stranice)
 ========================================================= */
 
-function openMatchReport(matchIndex){
+function openMatchReport(matchIndex,updateUrl=true){
 
     const m = matches[matchIndex];
     const container = document.getElementById('izvjestajContent');
 
     if(!container || !m){
-        return;
+        return false;
     }
 
     const home = m.venue === 'Domaćin';
@@ -3702,6 +3923,16 @@ function openMatchReport(matchIndex){
                 <div class="report-date">${formatDate(m.date)} · ${m.round}. Kolo</div>
             </div>
 
+            <div style="text-align:center;margin-bottom:15px;">
+                <button
+                    class="match-btn"
+                    style="width:auto;display:inline-block;padding:9px 16px;"
+                    onclick="shareMatchReport(${m.round},this)"
+                >
+                    🔗 Podijeli izvještaj
+                </button>
+            </div>
+
             <div class="report-score-box">
                 <div class="report-teams">
                     <div class="report-team">
@@ -3733,8 +3964,30 @@ function openMatchReport(matchIndex){
         </div>
     `;
 
-    openTab(null,'izvjestaj');
+    openTab(null,'izvjestaj',updateUrl,updateUrl?('izvjestaj-'+m.round):null);
+
+    return true;
 }
+
+
+// Kad se link ka konkretnom izvještaju (npr. #izvjestaj-5, gdje je 5 broj
+// kola) otvori - pri učitavanju stranice ili preko "Nazad/Naprijed" - ova
+// funkcija pronalazi tu utakmicu po broju kola i prikazuje izvještaj.
+function openMatchReportByRound(roundValue){
+
+    const roundNum = Number(roundValue);
+
+    const idx = matches.findIndex(m => m.round === roundNum);
+
+    if(idx === -1){
+        return false;
+    }
+
+    return openMatchReport(idx,false);
+
+}
+
+
 /* =========================================================
    POKRETANJE UČITAVANJA PODATAKA SA GITHUB-A
 ========================================================= */
