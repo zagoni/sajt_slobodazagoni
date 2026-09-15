@@ -1,10 +1,10 @@
 {
-  "played": 1,
+  "played": 2,
   "won": 0,
-  "drawn": 0,
+  "drawn": 1,
   "lost": 1,
-  "goals_for": 2,
-  "goals_against": 5,
-  "points": 0,
+  "goals_for": 3,
+  "goals_against": 6,
+  "points": 1,
   "title": "Omladinac Gornja Čađevica"
 }
