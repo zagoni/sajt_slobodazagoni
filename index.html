@@ -2758,6 +2758,11 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
     // vijest/izvještaj umjesto praznog taba.
     siteDataLoaded = true;
     resolveDeepLinkFromHash(window.location.hash);
+
+    // Pripremi PDF kompletnog rasporeda UNAPRIJED, u pozadini, čim su
+    // podaci stigli - da klik na dugme kasnije bude sinhron (vidi
+    // objašnjenje u pripremiSchedulePdfBlob()).
+    pripremiSchedulePdfBlob();
 }
 
 
@@ -3414,7 +3419,34 @@ function renderSchedule(){
 // sa liste). Koristi se ugrađeni dijalog za štampanje ("Sačuvaj kao PDF"),
 // pa nema potrebe za dodatnim bibliotekama i ćirilica/šumnici (č,ć,đ,š,ž)
 // se ispravno prikazuju jer se izlaz pravi direktno iz HTML-a stranice.
-function downloadFullSchedulePdf(){
+// Već pripremljen PDF (kao Blob URL) - vidi pripremiSchedulePdfBlob().
+// Pravi se UNAPRIJED, čim se podaci učitaju, a ne tek kad korisnik
+// klikne dugme.
+let schedulePdfBlobUrl = null;
+let schedulePdfBuilding = false;
+
+
+// Napravi sadržaj "kompletnog rasporeda" (naslov + tabela svih utakmica,
+// odigranih i budućih) u #printSchedule kontejneru, uslika ga
+// (html2canvas) i od te slike napravi PDF (jsPDF) - tako se č,ć,đ,š,ž
+// uvijek ispravno prikazuju, bez potrebe za posebnim fontovima.
+// VAŽNO: ova funkcija se poziva UNAPRIJED (čim stignu podaci sa
+// GitHub-a), NIKAD direktno iz onclick-a dugmeta. Na telefonu (naročito
+// iPhone/Safari) preuzimanje fajla mora da se pokrene SINHRONO, u istom
+// pozivu kao klik korisnika - čim se ubaci "await" (kakav ovdje mora da
+// postoji zbog html2canvas-a) prije preuzimanja, telefon više ne
+// prepoznaje da je preuzimanje zaista pokrenuto klikom i tiho ga
+// blokira (bez ikakve greške). Zato se PDF pravi ranije, u pozadini, a
+// klik na dugme samo sinhrono "preuzme" već gotov fajl.
+async function pripremiSchedulePdfBlob(){
+
+    if(schedulePdfBuilding){
+        return;
+    }
+
+    if(typeof html2canvas === 'undefined' || !window.jspdf){
+        return;
+    }
 
     const printContainer = document.getElementById('printSchedule');
 
@@ -3422,10 +3454,7 @@ function downloadFullSchedulePdf(){
         return;
     }
 
-    if(!matches.length){
-        alert('Raspored još uvijek nije učitan ili nije unesen.');
-        return;
-    }
+    schedulePdfBuilding = true;
 
     const sorted = matches
         .slice()
@@ -3473,32 +3502,6 @@ function downloadFullSchedulePdf(){
         </table>
     `;
 
-    buildAndDownloadSchedulePdf(printContainer);
-
-}
-
-
-// Napravi PDF fajl od sadržaja u printContainer-u i odmah ga preuzmi -
-// radi i na telefonu (za razliku od window.print(), koji na telefonu
-// obično ne nudi opciju "Sačuvaj kao PDF" nego samo štampače). Renderuje
-// se stvarni HTML u sliku (html2canvas), pa se ta slika ubaci u PDF
-// (jsPDF) - tako se č,ć,đ,š,ž uvijek ispravno prikazuju, bez potrebe za
-// posebnim fontovima.
-async function buildAndDownloadSchedulePdf(printContainer){
-
-    if(typeof html2canvas === 'undefined' || !window.jspdf){
-        alert('PDF alat se nije učitao (provjerite internet konekciju) - pokušajte ponovo.');
-        return;
-    }
-
-    const btn = document.getElementById('pdfScheduleBtn');
-    const originalBtnText = btn ? btn.textContent : null;
-
-    if(btn){
-        btn.disabled = true;
-        btn.textContent = '⏳ Pravim PDF...';
-    }
-
     // Kontejner se privremeno "otkrije" (van ekrana, ali renderovan) da bi
     // html2canvas mogao da ga uslika - #printSchedule je inače uvijek
     // sakriven preko CSS-a (display:none).
@@ -3537,22 +3540,66 @@ async function buildAndDownloadSchedulePdf(printContainer){
             heightLeft -= pageHeight;
         }
 
-        pdf.save('raspored-fk-sloboda-donji-zagoni.pdf');
+        const blob = pdf.output('blob');
+
+        if(schedulePdfBlobUrl){
+            URL.revokeObjectURL(schedulePdfBlobUrl);
+        }
+
+        schedulePdfBlobUrl = URL.createObjectURL(blob);
 
     }catch(e){
 
-        alert('Došlo je do greške prilikom pravljenja PDF-a. Pokušajte ponovo.');
+        // Tiho - ako pravljenje PDF-a ne uspije u pozadini, korisnik će
+        // dobiti jasnu poruku kad pritisne dugme (schedulePdfBlobUrl je
+        // i dalje null), a ne prazan/nem "ništa se ne dešava" efekat.
 
     }finally{
 
-        // Vrati kontejner u sakriveno stanje (kao što je bio prije klika).
+        // Vrati kontejner u sakriveno stanje (kao što je bio prije).
         printContainer.removeAttribute('style');
+        schedulePdfBuilding = false;
 
-        if(btn){
-            btn.disabled = false;
-            btn.textContent = originalBtnText;
-        }
+    }
 
+}
+
+
+// Onclick handler dugmeta "Preuzmi kompletan raspored (PDF)". Namjerno
+// NIJE async i ne sadrži nijedan "await" prije preuzimanja - vidi
+// objašnjenje u pripremiSchedulePdfBlob() iznad. PDF je (skoro uvijek)
+// već gotov u pozadini do trenutka klika, pa ovdje samo sinhrono
+// pokrenemo preuzimanje već gotovog fajla.
+function downloadFullSchedulePdf(){
+
+    if(!schedulePdfBlobUrl){
+
+        alert(
+            typeof html2canvas === 'undefined' || !window.jspdf
+                ? 'PDF alat se nije učitao (provjerite internet konekciju) - pokušajte ponovo za par sekundi.'
+                : 'PDF se još priprema - pokušajte ponovo za par sekundi.'
+        );
+
+        // Pokušaj (ponovo) da ga pripremiš u pozadini za sljedeći klik.
+        pripremiSchedulePdfBlob();
+
+        return;
+
+    }
+
+    const link = document.createElement('a');
+    link.href = schedulePdfBlobUrl;
+    link.download = 'raspored-fk-sloboda-donji-zagoni.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Neki ugrađeni preglednici (npr. unutar Viber/WhatsApp/Instagram
+    // aplikacija na telefonu) ignorišu "download" atribut na blob linku -
+    // kao rezervu, otvori PDF u novom tabu gdje korisnik može da ga
+    // sačuva preko "Podijeli" / "Sačuvaj u Files" opcije.
+    if(!('download' in link)){
+        window.open(schedulePdfBlobUrl, '_blank');
     }
 
 }
