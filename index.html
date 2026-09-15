@@ -1666,6 +1666,55 @@ footer{
     background-color: #002244 !important;
     color: #ffffff !important;
 }
+
+/* =========================================================
+   PDF / ŠTAMPANJE KOMPLETNOG RASPOREDA
+   Sadržaj se ubaci u #printSchedule tek kad korisnik klikne dugme, a
+   @media print pravilo sakrije sve OSIM tog sadržaja - tako se preko
+   "Sačuvaj kao PDF" opcije u dijalogu za štampanje dobija čist PDF sa
+   kompletnim rasporedom svih utakmica (odigranih i budućih).
+========================================================= */
+#printSchedule {
+    display: none;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #printSchedule, #printSchedule * {
+        visibility: visible;
+    }
+
+    #printSchedule {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    #printSchedule table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    #printSchedule th, #printSchedule td {
+        border: 1px solid #999;
+        padding: 6px 8px;
+        text-align: left;
+    }
+
+    #printSchedule thead tr {
+        background: #003366 !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
 </style>
 
 </head>
@@ -1899,6 +1948,16 @@ Tabela – Druga opštinska liga Bijeljine
 <section id="raspored" class="tab-content">
 
     <h2 style="text-align: center; color: #003366; margin-bottom: 20px;">Raspored utakmica – Jesenji dio 2026/27</h2>
+
+    <div style="text-align:center;margin-bottom:20px;">
+        <button
+            class="match-btn"
+            style="width:auto;display:inline-block;padding:10px 20px;"
+            onclick="downloadFullSchedulePdf()"
+        >
+            📄 Preuzmi kompletan raspored (PDF)
+        </button>
+    </div>
 
     <div id="scheduleList"></div>
 
@@ -2356,6 +2415,12 @@ let matches  = [];
 let players  = [];
 let newsData = [];
 
+// Postaje true tek kad loadSiteData() završi i podaci sa GitHub-a su
+// stvarno stigli (vijesti, izvještaji...). Koristi se da se na "load"
+// događaju (koji čeka i da se sve slike učitaju, pa zna da bude sporiji
+// od učitavanja podataka) ne prepiše preko već ispravno otvorene vijesti.
+let siteDataLoaded = false;
+
 
 /* =========================================================
    UČITAVANJE SADRŽAJA SA GITHUB-A (iz /admin panela)
@@ -2704,6 +2769,7 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
     // izvještaju o utakmici (npr. link poslat na Viberu/WhatsApp-u), tek
     // sada su podaci sa GitHub-a stigli - probaj da otvoriš tačno tu
     // vijest/izvještaj umjesto praznog taba.
+    siteDataLoaded = true;
     resolveDeepLinkFromHash(window.location.hash);
 }
 
@@ -3354,6 +3420,75 @@ function renderSchedule(){
 }
 
 
+// Napravi PDF sa KOMPLETNIM rasporedom (sve utakmice, odigrane i buduće -
+// za razliku od taba "Raspored" koji poslije odigravanja utakmicu skloni
+// sa liste). Koristi se ugrađeni dijalog za štampanje ("Sačuvaj kao PDF"),
+// pa nema potrebe za dodatnim bibliotekama i ćirilica/šumnici (č,ć,đ,š,ž)
+// se ispravno prikazuju jer se izlaz pravi direktno iz HTML-a stranice.
+function downloadFullSchedulePdf(){
+
+    const printContainer = document.getElementById('printSchedule');
+
+    if(!printContainer){
+        return;
+    }
+
+    if(!matches.length){
+        alert('Raspored još uvijek nije učitan ili nije unesen.');
+        return;
+    }
+
+    const sorted = matches
+        .slice()
+        .sort((a,b) => a.round - b.round);
+
+    const rows = sorted.map(m=>{
+
+        const home = m.venue === 'Domaćin';
+        const domacin = home ? NAS_KLUB_KRATKO : m.opponent;
+        const gost    = home ? m.opponent      : NAS_KLUB_KRATKO;
+        const rezultat = m.isPlayed ? (m.score || '') : '–';
+
+        return `
+            <tr>
+                <td>${m.round}.</td>
+                <td>${escapeHtml(formatDate(m.date))}</td>
+                <td>${escapeHtml(domacin)}</td>
+                <td>${escapeHtml(gost)}</td>
+                <td style="text-align:center;">${escapeHtml(rezultat)}</td>
+            </tr>
+        `;
+
+    }).join('');
+
+    printContainer.innerHTML = `
+        <h1 style="text-align:center;color:#003366;margin-bottom:4px;">
+            ${escapeHtml(NAS_KLUB_PUN_NAZIV)}
+        </h1>
+        <h2 style="text-align:center;color:#003366;border:none;margin-top:0;">
+            Kompletan raspored utakmica
+        </h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kolo</th>
+                    <th>Datum</th>
+                    <th>Domaćin</th>
+                    <th>Gost</th>
+                    <th>Rezultat</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>
+    `;
+
+    window.print();
+
+}
+
+
 function renderResults(){
 
     const container = document.getElementById('resultsList');
@@ -3720,6 +3855,21 @@ window.addEventListener(
             const isNewsLink   = tabName.indexOf('vijest-')===0;
             const isReportLink = tabName.indexOf('izvjestaj-')===0;
 
+            // Slike na stranici su velike, pa "load" događaj zna da se
+            // desi tek pošto su podaci sa GitHub-a (vijesti, izvještaji)
+            // već stigli i tačna vijest/izvještaj je već ispravno
+            // prikazana od strane resolveDeepLinkFromHash() na kraju
+            // loadSiteData(). U tom slučaju NE smijemo ovdje ponovo
+            // otvoriti praznu listu (vijesti/rezultati) - to bi "pregazilo"
+            // već otvorenu vijest nazad na listu.
+            if(
+                (isNewsLink || isReportLink) &&
+                siteDataLoaded &&
+                resolveDeepLinkFromHash(hash)
+            ){
+                return;
+            }
+
             let openTabName = tabName;
 
             if(isNewsLink){
@@ -4000,6 +4150,11 @@ loadSiteData();
 
 </script>
 
+<!-- Sakriveni kontejner koji se popuni tek kad korisnik klikne "Preuzmi
+     kompletan raspored (PDF)" - vidljiv je jedino kada je stranica u
+     režimu štampe (@media print), pa se preko "Sačuvaj kao PDF" dobija
+     PDF sa kompletnim rasporedom svih utakmica. -->
+<div id="printSchedule"></div>
 
 </body>
 
