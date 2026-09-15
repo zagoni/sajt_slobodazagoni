@@ -3587,20 +3587,39 @@ function downloadFullSchedulePdf(){
 
     }
 
+    // Na telefonu (naročito iPhone/Safari, i ugrađeni preglednici unutar
+    // Viber/WhatsApp/Instagram aplikacija) "download" atribut na blob
+    // linku se u praksi TIHO IGNORIŠE - link.download postoji (browser
+    // "kaže" da ga podržava), ali se ništa ne desi na klik. Zato se na
+    // telefonu PDF namjerno NE preuzima direktno, nego se otvara u novom
+    // tabu/pregledaču PDF-a, odakle korisnik preko dugmeta za dijeljenje
+    // (ikonica sa strelicom/kvadratom) bira "Sačuvaj u Files" i slično -
+    // to na telefonima pouzdano radi, za razliku od direktnog preuzimanja.
+    const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent || '');
+
+    if(isMobile){
+
+        const noviTab = window.open(schedulePdfBlobUrl, '_blank');
+
+        if(!noviTab){
+            // Ako je pregledač blokirao otvaranje novog taba, pređi na
+            // PDF direktno u istom tabu.
+            window.location.href = schedulePdfBlobUrl;
+        }
+
+        return;
+
+    }
+
+    // Na računaru: pravo preuzimanje fajla (browser sam pita gdje da ga
+    // sačuva, ili ga odmah spusti u "Downloads" folder - zavisno od
+    // podešavanja browsera).
     const link = document.createElement('a');
     link.href = schedulePdfBlobUrl;
     link.download = 'raspored-fk-sloboda-donji-zagoni.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-
-    // Neki ugrađeni preglednici (npr. unutar Viber/WhatsApp/Instagram
-    // aplikacija na telefonu) ignorišu "download" atribut na blob linku -
-    // kao rezervu, otvori PDF u novom tabu gdje korisnik može da ga
-    // sačuva preko "Podijeli" / "Sačuvaj u Files" opcije.
-    if(!('download' in link)){
-        window.open(schedulePdfBlobUrl, '_blank');
-    }
 
 }
 
