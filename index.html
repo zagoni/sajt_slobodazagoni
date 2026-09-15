@@ -3423,6 +3423,7 @@ function renderSchedule(){
 // Pravi se UNAPRIJED, čim se podaci učitaju, a ne tek kad korisnik
 // klikne dugme.
 let schedulePdfBlobUrl = null;
+let schedulePdfDataUri = null;
 let schedulePdfBuilding = false;
 
 
@@ -3548,6 +3549,15 @@ async function pripremiSchedulePdfBlob(){
 
         schedulePdfBlobUrl = URL.createObjectURL(blob);
 
+        // Za telefon: "data:" URI (a ne "blob:") - blob: URL važi samo u
+        // dokumentu/tabu koji ga je napravio, pa u nekim mobilnim
+        // pregledačima (npr. ugrađeni preglednik unutar Instagram/
+        // Facebook/Viber aplikacija) ili pri otvaranju u novom tabu ne
+        // uspije da se učita. "data:" URI nosi sav sadržaj fajla direktno
+        // u samom linku, pa ne zavisi od toga koji je dokument napravio -
+        // pouzdaniji je u tim ograničenim pregledačima.
+        schedulePdfDataUri = pdf.output('datauristring');
+
     }catch(e){
 
         // Tiho - ako pravljenje PDF-a ne uspije u pozadini, korisnik će
@@ -3587,25 +3597,43 @@ function downloadFullSchedulePdf(){
 
     }
 
-    // Na telefonu (naročito iPhone/Safari, i ugrađeni preglednici unutar
-    // Viber/WhatsApp/Instagram aplikacija) "download" atribut na blob
-    // linku se u praksi TIHO IGNORIŠE - link.download postoji (browser
-    // "kaže" da ga podržava), ali se ništa ne desi na klik. Zato se na
-    // telefonu PDF namjerno NE preuzima direktno, nego se otvara u novom
-    // tabu/pregledaču PDF-a, odakle korisnik preko dugmeta za dijeljenje
-    // (ikonica sa strelicom/kvadratom) bira "Sačuvaj u Files" i slično -
-    // to na telefonima pouzdano radi, za razliku od direktnog preuzimanja.
-    const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent || '');
+    const ua = navigator.userAgent || '';
+    const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(ua);
+
+    // Ugrađeni "preglednici" unutar Instagram/Facebook/Viber/TikTok itd.
+    // aplikacija namjerno ograničavaju preuzimanje fajlova i prikaz PDF-a
+    // - to nije nešto što se može zaobići kodom na strani sajta, jedini
+    // pouzdan način je da korisnik otvori link u pravom pregledaču
+    // (Safari/Chrome), pa mu to i predložimo umjesto da opet tiho ne
+    // uspije.
+    const isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Line\/|TikTok|Snapchat|Twitter/i.test(ua);
+
+    if(isMobile && isInAppBrowser){
+
+        alert(
+            'Preuzimanje PDF-a ne radi pouzdano unutar ugrađenog pregledača ' +
+            '(Instagram/Facebook/Viber i sl.). Pritisnite "⋮" ili "..." ' +
+            '(obično u gornjem desnom uglu) i izaberite "Otvori u ' +
+            'pregledaču" / "Open in Browser", pa pokušajte ponovo.'
+        );
+
+        return;
+
+    }
 
     if(isMobile){
 
-        const noviTab = window.open(schedulePdfBlobUrl, '_blank');
-
-        if(!noviTab){
-            // Ako je pregledač blokirao otvaranje novog taba, pređi na
-            // PDF direktno u istom tabu.
-            window.location.href = schedulePdfBlobUrl;
-        }
+        // Na telefonu "download" atribut na blob linku se u praksi TIHO
+        // IGNORIŠE (link.download postoji, ali se ništa ne desi na
+        // klik), a otvaranje u NOVOM tabu (window.open) takođe ne radi
+        // pouzdano u Safariju - otud i ono "bljesne bijelo pa nestane".
+        // Zato PDF otvaramo direktno u ISTOM tabu, promjenom
+        // window.location na blob: URL (potvrđeno radi u pravom Chrome-u
+        // na telefonu). NAPOMENA: "data:" URI je NAMJERNO izbjegnut ovdje
+        // - moderni Chrome/Chromium blokira top-level navigaciju na
+        // data: linkove (sigurnosna mjera protiv phishing stranica), pa
+        // bi to tiho ne radilo baš u Chrome-u.
+        window.location.href = schedulePdfBlobUrl;
 
         return;
 
