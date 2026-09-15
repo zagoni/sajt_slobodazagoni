@@ -5,6 +5,12 @@
 
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
+<!-- Za dugme "Preuzmi kompletan raspored (PDF)" - pravi pravi .pdf fajl koji
+     se direktno preuzima (radi i na telefonu, za razliku od dijaloga za
+     štampanje koji na telefonu ne nudi preuzimanje fajla). -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <meta charset="UTF-8">
 
 <meta
@@ -1668,52 +1674,32 @@ footer{
 }
 
 /* =========================================================
-   PDF / ŠTAMPANJE KOMPLETNOG RASPOREDA
-   Sadržaj se ubaci u #printSchedule tek kad korisnik klikne dugme, a
-   @media print pravilo sakrije sve OSIM tog sadržaja - tako se preko
-   "Sačuvaj kao PDF" opcije u dijalogu za štampanje dobija čist PDF sa
-   kompletnim rasporedom svih utakmica (odigranih i budućih).
+   PDF KOMPLETNOG RASPOREDA
+   Sadržaj se ubaci u #printSchedule tek kad korisnik klikne dugme
+   "Preuzmi kompletan raspored (PDF)". Kontejner je inače uvijek sakriven
+   (display:none) - JS ga privremeno prikaže van vidljivog dijela ekrana
+   samo da bi html2canvas mogao da ga uslika, pa se ta slika ubaci u pravi
+   .pdf fajl koji se odmah preuzima (radi i na telefonu).
 ========================================================= */
 #printSchedule {
     display: none;
 }
 
-@media print {
-    body * {
-        visibility: hidden;
-    }
+#printSchedule table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
 
-    #printSchedule, #printSchedule * {
-        visibility: visible;
-    }
+#printSchedule th, #printSchedule td {
+    border: 1px solid #999;
+    padding: 6px 8px;
+    text-align: left;
+}
 
-    #printSchedule {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        padding: 20px;
-    }
-
-    #printSchedule table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-    }
-
-    #printSchedule th, #printSchedule td {
-        border: 1px solid #999;
-        padding: 6px 8px;
-        text-align: left;
-    }
-
-    #printSchedule thead tr {
-        background: #003366 !important;
-        color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
+#printSchedule thead tr {
+    background: #003366;
+    color: #ffffff;
 }
 </style>
 
@@ -1951,6 +1937,7 @@ Tabela – Druga opštinska liga Bijeljine
 
     <div style="text-align:center;margin-bottom:20px;">
         <button
+            id="pdfScheduleBtn"
             class="match-btn"
             style="width:auto;display:inline-block;padding:10px 20px;"
             onclick="downloadFullSchedulePdf()"
@@ -3304,12 +3291,14 @@ function renderStats(){
         return;
     }
 
-    function topRows(key, limit=3){
+    // Prikazuje SVE igrače koji imaju bar 1 u datoj statistici (golovi,
+    // asistencije, žuti/crveni kartoni) - ne samo najboljih par, nego
+    // svakog ko ih ima, sortirano od najviše ka najmanje.
+    function topRows(key){
 
         const sorted = [...players]
             .filter(p => p[key] > 0)
-            .sort((a,b) => b[key] - a[key])
-            .slice(0, limit);
+            .sort((a,b) => b[key] - a[key]);
 
         if(!sorted.length){
             return `
@@ -3462,10 +3451,10 @@ function downloadFullSchedulePdf(){
     }).join('');
 
     printContainer.innerHTML = `
-        <h1 style="text-align:center;color:#003366;margin-bottom:4px;">
+        <h1 style="text-align:center;color:#003366;margin-bottom:4px;font-size:22px;">
             ${escapeHtml(NAS_KLUB_PUN_NAZIV)}
         </h1>
-        <h2 style="text-align:center;color:#003366;border:none;margin-top:0;">
+        <h2 style="text-align:center;color:#003366;border:none;margin-top:0;font-size:16px;">
             Kompletan raspored utakmica
         </h2>
         <table>
@@ -3484,7 +3473,87 @@ function downloadFullSchedulePdf(){
         </table>
     `;
 
-    window.print();
+    buildAndDownloadSchedulePdf(printContainer);
+
+}
+
+
+// Napravi PDF fajl od sadržaja u printContainer-u i odmah ga preuzmi -
+// radi i na telefonu (za razliku od window.print(), koji na telefonu
+// obično ne nudi opciju "Sačuvaj kao PDF" nego samo štampače). Renderuje
+// se stvarni HTML u sliku (html2canvas), pa se ta slika ubaci u PDF
+// (jsPDF) - tako se č,ć,đ,š,ž uvijek ispravno prikazuju, bez potrebe za
+// posebnim fontovima.
+async function buildAndDownloadSchedulePdf(printContainer){
+
+    if(typeof html2canvas === 'undefined' || !window.jspdf){
+        alert('PDF alat se nije učitao (provjerite internet konekciju) - pokušajte ponovo.');
+        return;
+    }
+
+    const btn = document.getElementById('pdfScheduleBtn');
+    const originalBtnText = btn ? btn.textContent : null;
+
+    if(btn){
+        btn.disabled = true;
+        btn.textContent = '⏳ Pravim PDF...';
+    }
+
+    // Kontejner se privremeno "otkrije" (van ekrana, ali renderovan) da bi
+    // html2canvas mogao da ga uslika - #printSchedule je inače uvijek
+    // sakriven preko CSS-a (display:none).
+    printContainer.style.cssText =
+        'display:block;position:fixed;top:0;left:-99999px;' +
+        'width:760px;background:#ffffff;padding:20px;';
+
+    try{
+
+        const canvas = await html2canvas(printContainer, {
+            scale: 2,
+            backgroundColor: '#ffffff',
+            useCORS: true
+        });
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'pt', 'a4');
+
+        const pageWidth  = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        const imgWidth  = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const imgData   = canvas.toDataURL('image/png');
+
+        let heightLeft = imgHeight;
+        let position   = 0;
+
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while(heightLeft > 0){
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+
+        pdf.save('raspored-fk-sloboda-donji-zagoni.pdf');
+
+    }catch(e){
+
+        alert('Došlo je do greške prilikom pravljenja PDF-a. Pokušajte ponovo.');
+
+    }finally{
+
+        // Vrati kontejner u sakriveno stanje (kao što je bio prije klika).
+        printContainer.removeAttribute('style');
+
+        if(btn){
+            btn.disabled = false;
+            btn.textContent = originalBtnText;
+        }
+
+    }
 
 }
 
@@ -4151,9 +4220,8 @@ loadSiteData();
 </script>
 
 <!-- Sakriveni kontejner koji se popuni tek kad korisnik klikne "Preuzmi
-     kompletan raspored (PDF)" - vidljiv je jedino kada je stranica u
-     režimu štampe (@media print), pa se preko "Sačuvaj kao PDF" dobija
-     PDF sa kompletnim rasporedom svih utakmica. -->
+     kompletan raspored (PDF)" - JS ga privremeno prikaže van ekrana da bi
+     mogao da se uslika i pretvori u pravi .pdf fajl za preuzimanje. -->
 <div id="printSchedule"></div>
 
 </body>
