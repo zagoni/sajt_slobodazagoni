@@ -1,10 +1,10 @@
 {
-  "played": 3,
+  "played": 4,
   "won": 2,
   "drawn": 0,
-  "lost": 1,
-  "goals_for": 3,
-  "goals_against": 2,
+  "lost": 2,
+  "goals_for": 4,
+  "goals_against": 5,
   "points": 6,
   "title": "Piperci"
 }
