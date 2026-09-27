@@ -1,10 +1,10 @@
 {
-  "played": 4,
-  "won": 2,
+  "played": 5,
+  "won": 3,
   "drawn": 1,
   "lost": 1,
-  "goals_for": 7,
-  "goals_against": 5,
-  "points": 7,
+  "goals_for": 11,
+  "goals_against": 6,
+  "points": 10,
   "title": "Koridor Bijeljina"
 }
