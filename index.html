@@ -1701,6 +1701,51 @@ footer{
     background: #003366;
     color: #ffffff;
 }
+
+/* =========================================================
+   MEČ UŽIVO
+========================================================= */
+.match-card.live-card {
+    border: 2px solid #dc2626;
+    box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
+}
+
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #dc2626;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffffff;
+    animation: livePulse 1.2s infinite;
+}
+
+.live-minute {
+    color: #dc2626;
+    font-weight: 800;
+}
+
+.live-card .match-score-center {
+    color: #dc2626;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .25; }
+}
 </style>
 
 </head>
@@ -1864,7 +1909,7 @@ footer{
     class="tab-content active"
 >
 
-    <!-- PRETHODNI REZULTAT (popunjava JS iz CMS podataka) -->
+    <!-- PRETHODNI REZULTAT ili MEČ UŽIVO (popunjava JS iz CMS podataka) -->
     <div id="prevMatchCard"></div>
 
     <!-- SLEDEĆA UTAKMICA (popunjava JS iz CMS podataka) -->
@@ -2121,7 +2166,9 @@ Tabela – Druga opštinska liga Bijeljine
         Galerija sa utakmica
     </h2>
 
-    <div class="gallery">
+    <!-- Slike dodate kroz admin panel (kolekcija "Galerija") JS ubacuje
+         na početak ove mreže, ispred starih slika. -->
+    <div class="gallery" id="galleryGrid">
 
         <img
             src="slika1.webp"
@@ -2617,43 +2664,129 @@ function collectMatchPlayerStats(rez){
 }
 
 
-async function loadSiteData(){
-const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = await Promise.all([
-        fetchFolder('sadrzaj/klubovi'),
-        fetchFolder('sadrzaj/tabela'),
-        fetchFolder('sadrzaj/igraci'),
-        fetchFolder('sadrzaj/vijesti'),
-        fetchFolder('sadrzaj/utakmice'),
-        fetchFolder('sadrzaj/rezultati'),
-    ]);
-    // Mapa: naziv kluba -> putanja do grba
-    const klubLogo = {};
-    klubovi.forEach(k=>{
-        if(k.title){
-            klubLogo[k.title] = k.logo || NAS_KLUB_GRB;
+/* =========================================================
+   MEČ UŽIVO - SAT UTAKMICE
+
+   U admin panelu (Rezultati -> "Meč uživo") klikom na dugme se
+   upiše vrijeme početka utakmice. Sajt iz tog vremena sam računa
+   minutu: 1.-45. minut, pa 15 min poluvremena, pa 46.-90. minut.
+   Ako je u adminu kliknuto "Počelo 2. poluvrijeme", drugo
+   poluvrijeme se računa od tog tačnog trenutka.
+========================================================= */
+
+const POLUVRIJEME_MIN   = 45; // trajanje jednog poluvremena
+const PAUZA_MIN         = 15; // pauza na poluvremenu
+// Ako zaboraviš da ugasiš "uživo" u adminu, sajt ga sam ugasi ovoliko
+// minuta nakon 90. minuta i utakmica se prikaže kao prethodni rezultat.
+const AUTO_KRAJ_POSLIJE_90_MIN = 45;
+
+// Vrijednost polja "uzivo" iz admina je tekst u JSON obliku, npr.
+// {"start":"2026-09-28T15:00:00.000Z","second":""}
+function parseLiveState(value){
+    if(!value){
+        return null;
+    }
+    try{
+        const obj = typeof value === 'string' ? JSON.parse(value) : value;
+        if(!obj || !obj.start || isNaN(Date.parse(obj.start))){
+            return null;
         }
+        return obj;
+    }catch(e){
+        return null;
+    }
+}
+
+// Vraća { phase, label } za trenutni trenutak:
+// phase: 'pre' (još nije počela), '1' (1. poluvrijeme), 'ht' (poluvrijeme),
+//        '2' (2. poluvrijeme), 'extra' (poslije 90.), 'over' (automatski kraj)
+function liveClock(state, now){
+    now = now || Date.now();
+
+    const start = Date.parse(state.start);
+    const second = (state.second && !isNaN(Date.parse(state.second)))
+        ? Date.parse(state.second)
+        : start + (POLUVRIJEME_MIN + PAUZA_MIN) * 60000;
+
+    const el1 = (now - start) / 60000;
+
+    if(el1 < 0){
+        return { phase:'pre', label:'Uskoro' };
+    }
+
+    if(now < second){
+        if(el1 < POLUVRIJEME_MIN){
+            return { phase:'1', label: (Math.floor(el1) + 1) + "'" };
+        }
+        return { phase:'ht', label:'Poluvrijeme' };
+    }
+
+    const el2 = (now - second) / 60000;
+
+    if(el2 < POLUVRIJEME_MIN){
+        return { phase:'2', label: (POLUVRIJEME_MIN + Math.floor(el2) + 1) + "'" };
+    }
+
+    if(el2 < POLUVRIJEME_MIN + AUTO_KRAJ_POSLIJE_90_MIN){
+        return { phase:'extra', label:"90+'" };
+    }
+
+    return { phase:'over', label:'Kraj' };
+}
+
+function isLiveNow(state){
+    return !!state && liveClock(state).phase !== 'over';
+}
+
+function liveMinuteSpan(m){
+    const c = liveClock(m.liveState);
+    return `<span class="live-minute" data-live-start="${escapeHtml(m.liveState.start)}" data-live-second="${escapeHtml(m.liveState.second || '')}">${c.label}</span>`;
+}
+
+function liveBadgeHTML(){
+    return `<span class="live-badge"><span class="live-dot"></span>Uživo</span>`;
+}
+
+// Svakih 10 sekundi osvježi minutu na svim karticama. Ako je neki meč
+// u međuvremenu automatski završen, ponovo složi prikaz.
+setInterval(()=>{
+    document.querySelectorAll('.live-minute').forEach(el=>{
+        const c = liveClock({ start: el.dataset.liveStart, second: el.dataset.liveSecond });
+        el.textContent = c.label;
     });
 
-    // TABELA
-    teams = tabelaRaw.map(t=>{
-        const gf = Number(t.goals_for) || 0;
-        const ga = Number(t.goals_against) || 0;
+    if(siteDataLoaded && matches.some(m => m.isLive && !isLiveNow(m.liveState))){
+        buildMatchesAndPlayers();
+        renderAfterMatchUpdate();
+    }
+}, 10000);
 
-        return {
-            name: t.title,
-            logo: klubLogo[t.title] || NAS_KLUB_GRB,
-            ou: Number(t.played) || 0,
-            p: Number(t.won) || 0,
-            n: Number(t.drawn) || 0,
-            i: Number(t.lost) || 0,
-            gf, ga,
-            gr: gf - ga,
-            bod: Number(t.points) || 0,
-            our: t.title === NAS_KLUB_PUN_NAZIV
-        };
-    });
+// Dok je meč uživo, svake 2 minute ponovo učitaj samo rezultate sa
+// GitHub-a, da bi se novi rezultat (npr. 1:0) pojavio bez osvježavanja
+// stranice. (GitHub zna da kasni do par minuta sa novim sadržajem.)
+setInterval(async ()=>{
+    if(!siteDataLoaded || !matches.some(m => m.isLive)){
+        return;
+    }
+    const fresh = await fetchFolder('sadrzaj/rezultati');
+    if(fresh.length){
+        rawData.rezultatiRaw = fresh;
+        buildMatchesAndPlayers();
+        renderAfterMatchUpdate();
+    }
+}, 120000);
 
- // UTAKMICE I REZULTATI
+
+// Sirovi podaci sa GitHub-a (čuvaju se da bi se utakmice mogle ponovo
+// složiti kad stignu novi rezultati tokom meča uživo)
+let rawData = { klubLogo:{}, igraciRaw:[], utakmiceRaw:[], rezultatiRaw:[] };
+let galleryData = [];
+
+function buildMatchesAndPlayers(){
+
+    const { klubLogo, igraciRaw, utakmiceRaw, rezultatiRaw } = rawData;
+
+    // UTAKMICE I REZULTATI
     matches = utakmiceRaw.map(u=>{
         // Pronađi rezultat po BROJU KOLA (ne po imenu protivnika - isti
         // protivnik se igra i doma i u gostima, pa ime nije dovoljno da
@@ -2667,13 +2800,19 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
         const reportText = rez ? rez.report_text : '';
         const playerStats = collectMatchPlayerStats(rez);
 
+        const liveState = rez ? parseLiveState(rez.uzivo) : null;
+        const isLive = isLiveNow(liveState);
+
         return {
             opponent: u.opponent,
             opponentLogo: klubLogo[u.opponent] || NAS_KLUB_GRB,
             date: u.date,
             venue: u.venue,
             round: Number(u.round) || 0,
-            isPlayed: !!score, // Automatski postaje odigrana čim upišeš rezultat!
+            isLive: isLive,
+            liveState: liveState,
+            // Odigrana = upisan rezultat I meč više nije uživo
+            isPlayed: !!score && !isLive,
             score: score,
             reportText: reportText,
             playerStats: playerStats
@@ -2713,6 +2852,60 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
             red: (Number(p.base_red_cards) || 0) + red
         };
     });
+}
+
+
+function renderAfterMatchUpdate(){
+    renderPlayers();
+    renderStats();
+    renderSchedule();
+    renderResults();
+    renderHomeCards();
+}
+
+
+async function loadSiteData(){
+const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw, galerijaRaw] = await Promise.all([
+        fetchFolder('sadrzaj/klubovi'),
+        fetchFolder('sadrzaj/tabela'),
+        fetchFolder('sadrzaj/igraci'),
+        fetchFolder('sadrzaj/vijesti'),
+        fetchFolder('sadrzaj/utakmice'),
+        fetchFolder('sadrzaj/rezultati'),
+        fetchFolder('sadrzaj/galerija'),
+    ]);
+    galleryData = galerijaRaw;
+
+    // Mapa: naziv kluba -> putanja do grba
+    const klubLogo = {};
+    klubovi.forEach(k=>{
+        if(k.title){
+            klubLogo[k.title] = k.logo || NAS_KLUB_GRB;
+        }
+    });
+
+    // TABELA
+    teams = tabelaRaw.map(t=>{
+        const gf = Number(t.goals_for) || 0;
+        const ga = Number(t.goals_against) || 0;
+
+        return {
+            name: t.title,
+            logo: klubLogo[t.title] || NAS_KLUB_GRB,
+            ou: Number(t.played) || 0,
+            p: Number(t.won) || 0,
+            n: Number(t.drawn) || 0,
+            i: Number(t.lost) || 0,
+            gf, ga,
+            gr: gf - ga,
+            bod: Number(t.points) || 0,
+            our: t.title === NAS_KLUB_PUN_NAZIV
+        };
+    });
+
+    // UTAKMICE I IGRAČI
+    rawData = { klubLogo, igraciRaw, utakmiceRaw, rezultatiRaw };
+    buildMatchesAndPlayers();
 
     // VIJESTI (najnovije prve)
     newsData = vijestiRaw
@@ -2751,6 +2944,7 @@ const [klubovi, tabelaRaw, igraciRaw, vijestiRaw, utakmiceRaw, rezultatiRaw] = a
     renderSchedule();
     renderResults();
     renderHomeCards();
+    renderGallery();
 
     // Ako je neko otvorio stranicu preko linka ka konkretnoj vijesti ili
     // izvještaju o utakmici (npr. link poslat na Viberu/WhatsApp-u), tek
@@ -3299,7 +3493,9 @@ function renderStats(){
     // Prikazuje SVE igrače koji imaju bar 1 u datoj statistici (golovi,
     // asistencije, žuti/crveni kartoni) - ne samo najboljih par, nego
     // svakog ko ih ima, sortirano od najviše ka najmanje.
-    function topRows(key){
+    function topRows(key, suffix){
+
+        suffix = suffix || '';
 
         const sorted = [...players]
             .filter(p => p[key] > 0)
@@ -3317,7 +3513,7 @@ function renderStats(){
         return sorted.map(p => `
             <div class="stat-item">
                 <span>${escapeHtml(p.name)}</span>
-                <strong>${p[key]}</strong>
+                <strong>${p[key]}${suffix}</strong>
             </div>
         `).join('');
     }
@@ -3331,6 +3527,11 @@ function renderStats(){
         <div class="stats-card">
             <h3>🎯 Asistencije</h3>
             ${topRows('assists')}
+        </div>
+
+        <div class="stats-card">
+            <h3>⏱️ Minutaža</h3>
+            ${topRows('minutes', "'")}
         </div>
 
         <div class="stats-card">
@@ -3394,7 +3595,7 @@ function renderSchedule(){
     }
 
     const upcoming = matches
-        .filter(m => !m.isPlayed)
+        .filter(m => !m.isPlayed && !m.isLive)
         .sort((a,b) => dateSortValue(a.date) - dateSortValue(b.date));
 
     if(!upcoming.length){
@@ -3664,13 +3865,15 @@ function renderResults(){
         .filter(m => m.isPlayed)
         .sort((a,b) => dateSortValue(b.date) - dateSortValue(a.date));
 
-    if(!played.length){
+    const live = matches.filter(m => m.isLive);
+
+    if(!played.length && !live.length){
         container.innerHTML =
             '<p style="text-align:center;color:#666;">Još uvijek nema odigranih utakmica.</p>';
         return;
     }
 
-    container.innerHTML = played.map(m => `
+    container.innerHTML = live.map(liveCardHTML).join('') + played.map(m => `
         <div class="match-card">
             <div class="match-card-header">${m.round}. Kolo</div>
             ${teamsRowHTML(m, false)}
@@ -3679,6 +3882,20 @@ function renderResults(){
         </div>
     `).join('');
 
+}
+
+
+// Kartica za meč koji je trenutno uživo (crvena oznaka + minuta)
+function liveCardHTML(m){
+    const liveView = Object.assign({}, m, { score: m.score || '0:0' });
+    return `
+        <div class="match-card live-card">
+            <div class="match-card-header">${liveBadgeHTML()} · ${liveMinuteSpan(m)} · ${m.round}. Kolo</div>
+            ${teamsRowHTML(liveView, false)}
+            <div class="match-card-footer">${formatDate(m.date)} · ${venueLabel(m)}</div>
+            <button class="match-btn" onclick="openMatchReport(${matches.indexOf(m)})">Detalji utakmice</button>
+        </div>
+    `;
 }
 
 
@@ -3692,10 +3909,15 @@ function renderHomeCards(){
         .sort((a,b) => dateSortValue(b.date) - dateSortValue(a.date));
 
     const upcoming = matches
-        .filter(m => !m.isPlayed)
+        .filter(m => !m.isPlayed && !m.isLive)
         .sort((a,b) => dateSortValue(a.date) - dateSortValue(b.date));
 
-    if(prevContainer){
+    const live = matches.filter(m => m.isLive);
+
+    if(prevContainer && live.length){
+        // Dok traje meč uživo, on stoji umjesto "Prethodni rezultat"
+        prevContainer.innerHTML = live.map(liveCardHTML).join('');
+    }else if(prevContainer){
         const m = played[0];
 
         prevContainer.innerHTML = m ? `
@@ -3724,6 +3946,44 @@ function renderHomeCards(){
             </div>
         ` : '<p style="text-align:center;color:#666;">Raspored za naredne utakmice biće uskoro objavljen.</p>';
     }
+
+}
+
+
+/* =========================================================
+   GALERIJA (slike dodate kroz admin panel)
+========================================================= */
+
+function renderGallery(){
+
+    const grid = document.getElementById('galleryGrid');
+
+    if(!grid || !galleryData.length){
+        return;
+    }
+
+    // Najnovije objave prve
+    const albums = galleryData
+        .slice()
+        .sort((a,b) => dateSortValue(b.date) - dateSortValue(a.date));
+
+    let html = '';
+
+    albums.forEach(album=>{
+        const title = album.title || 'FK Sloboda Donji Zagoni';
+        const images = Array.isArray(album.images) ? album.images : [];
+
+        images.forEach(item=>{
+            // Podržava i listu putanja i listu objekata { image: "..." }
+            const src = typeof item === 'string' ? item : (item && item.image);
+            if(!src){
+                return;
+            }
+            html += `<img src="${escapeHtml(src)}" alt="${escapeHtml(title)}" class="clickable-img" loading="lazy">`;
+        });
+    });
+
+    grid.insertAdjacentHTML('afterbegin', html);
 
 }
 
@@ -4234,6 +4494,7 @@ function openMatchReport(matchIndex,updateUrl=true){
                 <img src="${NAS_KLUB_GRB}" alt="${NAS_KLUB_KRATKO}" onerror="tryNextExt(this)">
                 <h1>${NAS_KLUB_PUN_NAZIV.toUpperCase()}</h1>
                 <div class="report-date">${formatDate(m.date)} · ${m.round}. Kolo</div>
+                ${m.isLive ? `<div style="margin-top:10px;">${liveBadgeHTML()} <span style="background:#fff;border-radius:4px;padding:2px 8px;margin-left:4px;">${liveMinuteSpan(m)}</span></div>` : ''}
             </div>
 
             <div style="text-align:center;margin-bottom:15px;">
@@ -4252,8 +4513,8 @@ function openMatchReport(matchIndex,updateUrl=true){
                         <img src="${leftLogo}" alt="${escapeHtml(leftName)}" onerror="this.src='grb.webp'">
                         <span>${escapeHtml(leftName)}</span>
                     </div>
-                    <div class="report-final-score">
-                        ${escapeHtml(m.score || '-')}
+                    <div class="report-final-score" ${m.isLive ? 'style="color:#dc2626;"' : ''}>
+                        ${escapeHtml(m.score || (m.isLive ? '0:0' : '-'))}
                     </div>
                     <div class="report-team">
                         <img src="${rightLogo}" alt="${escapeHtml(rightName)}" onerror="this.src='grb.webp'">
