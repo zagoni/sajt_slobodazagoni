@@ -1,10 +1,10 @@
 {
-  "played": 3,
-  "won": 2,
-  "drawn": 1,
+  "played": 5,
+  "won": 3,
+  "drawn": 2,
   "lost": 0,
-  "goals_for": 7,
-  "goals_against": 1,
-  "points": 7,
+  "goals_for": 12,
+  "goals_against": 4,
+  "points": 11,
   "title": "Balatun"
 }
