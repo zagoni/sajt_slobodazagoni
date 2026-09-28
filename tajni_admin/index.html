@@ -156,5 +156,146 @@
 
   })();
   </script>
+
+  <!-- ===========================================================
+       PRILAGOĐENO POLJE: "Meč uživo" (koristi se u config.yml preko
+       widget: "mec-uzivo" u kolekciji "Rezultati").
+       Klikom na dugme upiše se vrijeme početka utakmice, a sajt iz
+       toga sam računa minutu (1.-45., pauza 15 min, 46.-90.).
+       Vrijednost se čuva kao tekst, npr.
+       {"start":"2026-09-28T15:00:00.000Z","second":""}
+       Prazno = meč nije uživo.
+  =========================================================== -->
+  <script>
+  (function(){
+
+    var POLUVRIJEME_MIN = 45;
+    var PAUZA_MIN = 15;
+
+    function parseState(value){
+      if(!value){ return null; }
+      try{
+        var obj = typeof value === 'string' ? JSON.parse(value) : value;
+        if(obj && obj.toJS){ obj = obj.toJS(); }
+        if(!obj || !obj.start || isNaN(Date.parse(obj.start))){ return null; }
+        return obj;
+      }catch(e){ return null; }
+    }
+
+    function clockLabel(state){
+      var now = Date.now();
+      var start = Date.parse(state.start);
+      var second = (state.second && !isNaN(Date.parse(state.second)))
+        ? Date.parse(state.second)
+        : start + (POLUVRIJEME_MIN + PAUZA_MIN) * 60000;
+      var el1 = (now - start) / 60000;
+      if(el1 < 0){ return 'počinje uskoro'; }
+      if(now < second){
+        return el1 < POLUVRIJEME_MIN ? (Math.floor(el1) + 1) + "'" : 'poluvrijeme';
+      }
+      var el2 = (now - second) / 60000;
+      return el2 < POLUVRIJEME_MIN ? (POLUVRIJEME_MIN + Math.floor(el2) + 1) + "'" : "90+'";
+    }
+
+    // ISO vrijeme -> vrijednost za <input type="datetime-local"> (lokalno vrijeme)
+    function toLocalInput(iso){
+      var d = new Date(iso);
+      if(isNaN(d)){ return ''; }
+      function p(n){ return String(n).padStart(2,'0'); }
+      return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) +
+             'T' + p(d.getHours()) + ':' + p(d.getMinutes());
+    }
+
+    var btn = function(bg){
+      return { padding:'10px 14px', fontSize:'15px', fontWeight:'bold', border:'0',
+               borderRadius:'6px', cursor:'pointer', color:'#fff', background:bg,
+               marginRight:'8px', marginTop:'8px' };
+    };
+
+    var MecUzivoControl = createClass({
+
+      componentDidMount: function(){
+        var self = this;
+        this.timer = setInterval(function(){ self.forceUpdate(); }, 15000);
+      },
+
+      componentWillUnmount: function(){
+        clearInterval(this.timer);
+      },
+
+      save: function(state){
+        this.props.onChange(state ? JSON.stringify(state) : '');
+      },
+
+      start: function(){
+        this.save({ start: new Date().toISOString(), second: '' });
+      },
+
+      startSecondHalf: function(){
+        var st = parseState(this.props.value);
+        if(!st){ return; }
+        st.second = new Date().toISOString();
+        this.save(st);
+      },
+
+      stop: function(){
+        if(confirm('Završiti prikaz "uživo"? Utakmica će se na sajtu prikazati kao prethodni rezultat.')){
+          this.save(null);
+        }
+      },
+
+      changeStart: function(e){
+        var st = parseState(this.props.value);
+        var d = new Date(e.target.value);
+        if(!st || isNaN(d)){ return; }
+        st.start = d.toISOString();
+        this.save(st);
+      },
+
+      render: function(){
+        var st = parseState(this.props.value);
+
+        if(!st){
+          return h('div', { className: this.props.classNameWrapper, style:{ padding:'12px' } },
+            h('p', { style:{ margin:'0 0 4px', color:'#555' } }, '⚪ Meč trenutno NIJE uživo.'),
+            h('button', { type:'button', style: btn('#dc2626'), onClick: this.start },
+              '▶ Pokreni meč uživo (počinje sada)'),
+            h('p', { style:{ margin:'10px 0 0', fontSize:'13px', color:'#777' } },
+              'Poslije klika obavezno klikni "Publish" / "Objavi" gore desno.')
+          );
+        }
+
+        return h('div', { className: this.props.classNameWrapper, style:{ padding:'12px' } },
+          h('p', { style:{ margin:'0 0 6px', fontSize:'17px', fontWeight:'bold', color:'#dc2626' } },
+            '🔴 UŽIVO — ' + clockLabel(st)),
+          h('label', { style:{ display:'block', fontSize:'13px', color:'#555', marginTop:'6px' } },
+            'Početak utakmice (ispravi ako meč nije počeo tačno kad si kliknuo):'),
+          h('input', { type:'datetime-local', value: toLocalInput(st.start), onChange: this.changeStart,
+                       style:{ padding:'8px', fontSize:'15px', marginTop:'4px' } }),
+          h('div', {},
+            h('button', { type:'button', style: btn('#004488'), onClick: this.startSecondHalf },
+              st.second ? '▶ 2. poluvrijeme počelo SADA (ponovo)' : '▶ 2. poluvrijeme počelo sada'),
+            h('button', { type:'button', style: btn('#333'), onClick: this.stop },
+              '⏹ Završi uživo')
+          ),
+          h('p', { style:{ margin:'10px 0 0', fontSize:'13px', color:'#777' } },
+            'Poluvrijeme (15 min) i drugo poluvrijeme idu automatski. Dugme za 2. poluvrijeme ' +
+            'koristi samo ako hoćeš tačnu minutu. Rezultat mijenjaj u polju "Rezultat" i klikni "Publish".')
+        );
+      }
+
+    });
+
+    var MecUzivoPreview = createClass({
+      render: function(){
+        var st = parseState(this.props.value);
+        return h('p', {}, st ? '🔴 Uživo' : 'Nije uživo');
+      }
+    });
+
+    CMS.registerWidget('mec-uzivo', MecUzivoControl, MecUzivoPreview);
+
+  })();
+  </script>
 </body>
 </html>
