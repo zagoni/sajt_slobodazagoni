@@ -1,0 +1,114 @@
+{
+  "starting_lineup": [
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branko Babalj"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Đorđe Jović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Radislav Stevanović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 1,
+      "red_card": false,
+      "player": "Dražen Petrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Miloš Marković"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": true,
+      "player": "Luka Stankić"
+    },
+    {
+      "minutes": 65,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Žarko Rikanović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dejan Todorović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Darko Maksimović"
+    },
+    {
+      "minutes": 90,
+      "goals": 1,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Nikola Mitrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 1,
+      "red_card": false,
+      "player": "Slaviša Stanojević"
+    }
+  ],
+  "substitutes": [
+    {
+      "minute_in": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Marko Galić"
+    },
+    {
+      "minute_in": 65,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Rade Stankić",
+      "subbed_for": "Žarko Rikanović"
+    }
+  ],
+  "round": 6,
+  "match_title": "Ostojićevo",
+  "score": "2:1"
+}
