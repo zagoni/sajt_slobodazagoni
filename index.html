@@ -1856,6 +1856,10 @@ footer{
     0%, 100% { opacity: 1; }
     50%      { opacity: .25; }
 }
+/* FAN ZONA - dugme za otvaranje Padleta preko cijelog ekrana */
+.fan-open-btn{display:block;background:#ffcc00;color:#003366 !important;font-weight:bold;font-size:1.1em;padding:15px;border-radius:10px;text-decoration:none;margin:0 0 8px;box-shadow:0 2px 6px #0002;}
+.fan-hint{color:#64748b;font-size:.9em;margin:0 0 15px;}
+@media(max-width:600px){ .padlet-embed iframe{height:calc(100vh - 140px) !important;} }
 </style>
 
 </head>
@@ -4888,6 +4892,24 @@ loadSiteData();
      kompletan raspored (PDF)" - JS ga privremeno prikaže van ekrana da bi
      mogao da se uslika i pretvori u pravi .pdf fajl za preuzimanje. -->
 <div id="printSchedule"></div>
+
+<script>
+(function(){
+  var box = document.querySelector('.padlet-embed');
+  if(!box){ return; }
+  var a = document.createElement('a');
+  a.href = 'https://padlet.com/embed/gv0cr6j1tt6m1eir';
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.className = 'fan-open-btn';
+  a.textContent = '📱 Otvori Fan zonu preko cijelog ekrana';
+  box.parentNode.insertBefore(a, box);
+  var p = document.createElement('p');
+  p.className = 'fan-hint';
+  p.textContent = 'Tu najlakše dodaješ slike i poruke. Kad završiš, vrati se strelicom nazad.';
+  box.parentNode.insertBefore(p, box);
+})();
+</script>
 
 </body>
 
