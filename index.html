@@ -25,6 +25,16 @@
 
 <title>FK Sloboda Donji Zagoni | Zvanična stranica kluba</title>
 
+<!-- APLIKACIJA ZA TELEFON (PWA) - omogućava instalaciju sajta kao
+     aplikacije na početni ekran telefona -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#003366">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FK Sloboda">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <meta
     name="description"
     content="Zvanična web stranica FK Sloboda Donji Zagoni. Raspored, rezultati, tabela, vijesti, sastav, statistika i galerija."
@@ -1742,6 +1752,106 @@ footer{
     color: #dc2626;
 }
 
+/* =========================================================
+   INSTALIRAJ APLIKACIJU
+========================================================= */
+.tab-btn.app-tab-btn {
+    background: #ffcc00;
+    color: #003366;
+    border-color: #ffcc00;
+}
+
+.app-install-box {
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.app-install-logo {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 6px #0004);
+}
+
+.app-install-lead {
+    font-size: 1.05em;
+    line-height: 1.6;
+    color: #334155;
+}
+
+.app-install-btn {
+    display: inline-block;
+    background: #004488;
+    color: #ffffff;
+    border: 0;
+    border-radius: 10px;
+    padding: 15px 28px;
+    font-size: 1.15em;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 0 5px;
+    box-shadow: 0 3px 10px #00448855;
+}
+
+.app-install-btn:hover {
+    background: #0066cc;
+}
+
+.app-install-status {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+    border-radius: 8px;
+    padding: 14px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.app-steps {
+    text-align: left;
+    background: #f8fbff;
+    border: 1px solid #cfe0f5;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 18px;
+}
+
+.app-steps h3 {
+    margin: 0 0 10px;
+    font-size: 1.05em;
+}
+
+.app-steps ol {
+    margin: 0;
+    padding-left: 22px;
+    line-height: 1.8;
+}
+
+.app-steps .ios-share {
+    display: inline-block;
+    border: 1.5px solid #0066cc;
+    color: #0066cc;
+    border-radius: 4px;
+    padding: 0 5px;
+    font-size: .9em;
+    line-height: 1.4;
+}
+
+.app-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.app-benefits div {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: .92em;
+    color: #1e293b;
+}
+
 @keyframes livePulse {
     0%, 100% { opacity: 1; }
     50%      { opacity: .25; }
@@ -1892,6 +2002,14 @@ footer{
         onclick="openTab(event,'kontakt')"
     >
         Kontakt
+    </button>
+
+    <button
+        class="tab-btn app-tab-btn"
+        id="appTabBtn"
+        onclick="openTab(event,'aplikacija')"
+    >
+        📲 Instaliraj aplikaciju
     </button>
 
 </nav>
@@ -2343,6 +2461,49 @@ Tabela – Druga opštinska liga Bijeljine
 
             </p>
 
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     INSTALIRAJ APLIKACIJU
+========================================================= -->
+
+<section
+    id="aplikacija"
+    class="tab-content"
+>
+
+    <h2>
+        Aplikacija FK Sloboda
+    </h2>
+
+    <div class="app-install-box">
+
+        <img
+            src="grb.webp"
+            alt="FK Sloboda"
+            class="app-install-logo"
+            onerror="tryNextExt(this)"
+        >
+
+        <p class="app-install-lead">
+            Instaliraj aplikaciju kluba na svoj telefon i prati rezultate,
+            mečeve uživo, tabelu i vijesti jednim dodirom - sa ikonicom
+            na početnom ekranu, kao i svaka druga aplikacija.
+        </p>
+
+        <!-- Popunjava JS u zavisnosti od telefona/pregledača -->
+        <div id="appInstallArea"></div>
+
+        <div class="app-benefits">
+            <div>🔴 Mečevi uživo</div>
+            <div>📊 Tabela i rezultati</div>
+            <div>📰 Najnovije vijesti</div>
+            <div>🆓 Besplatno, bez prodavnice</div>
         </div>
 
     </div>
@@ -4559,6 +4720,155 @@ function openMatchReportByRound(roundValue){
 
     return openMatchReport(idx,false);
 
+}
+
+
+/* =========================================================
+   INSTALIRAJ APLIKACIJU (PWA)
+
+   - Android / računar (Chrome, Edge, Samsung Internet): pregledač
+     javi događaj "beforeinstallprompt" -> prikazuje se pravo dugme
+     "Instaliraj aplikaciju".
+   - iPhone / iPad: Apple ne dozvoljava dugme za instalaciju, pa se
+     prikazuje uputstvo (Podijeli -> Dodaj na početni ekran).
+   - Ako je aplikacija već otvorena kao instalirana, tab se sakrije.
+========================================================= */
+
+let deferredInstallPrompt = null;
+
+function isAppInstalled(){
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true;
+}
+
+function renderAppInstall(){
+
+    const area = document.getElementById('appInstallArea');
+
+    if(!area){
+        return;
+    }
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+    const isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Viber|Line\/|TikTok|Snapchat|Twitter/i.test(ua);
+    const isIOSNotSafari = isIOS && /CriOS|FxiOS|EdgiOS/i.test(ua);
+
+    if(isAppInstalled()){
+        area.innerHTML = `
+            <div class="app-install-status">✅ Aplikacija je instalirana i trenutno je koristiš.</div>
+        `;
+        return;
+    }
+
+    let html = '';
+
+    if(deferredInstallPrompt){
+        html += `
+            <button class="app-install-btn" onclick="installApp()">
+                📲 Instaliraj aplikaciju
+            </button>
+            <p style="color:#64748b;font-size:.9em;margin-top:4px;">
+                Instalacija traje par sekundi i ne zauzima skoro nimalo memorije.
+            </p>
+        `;
+    }
+
+    if(isInAppBrowser){
+        html += `
+            <div class="app-steps">
+                <h3>⚠️ Otvori sajt u pregledaču</h3>
+                <ol>
+                    <li>Pritisni <strong>⋮</strong> ili <strong>...</strong> (obično gore desno).</li>
+                    <li>Izaberi <strong>„Otvori u pregledaču“</strong> / <strong>„Open in browser“</strong>.</li>
+                    <li>Ponovo otvori tab <strong>„📲 Instaliraj aplikaciju“</strong>.</li>
+                </ol>
+            </div>
+        `;
+    }else if(isIOS){
+        html += `
+            <div class="app-steps">
+                <h3>📱 iPhone / iPad</h3>
+                <ol>
+                    ${isIOSNotSafari ? '<li>Otvori ovaj sajt u <strong>Safari</strong> pregledaču.</li>' : ''}
+                    <li>Pritisni dugme <strong>Podijeli</strong> <span class="ios-share">⬆</span> (na dnu ili vrhu ekrana).</li>
+                    <li>Skroluj i izaberi <strong>„Dodaj na početni ekran“</strong> (Add to Home Screen).</li>
+                    <li>Pritisni <strong>„Dodaj“</strong> - ikonica FK Sloboda se pojavi na početnom ekranu.</li>
+                </ol>
+            </div>
+        `;
+    }else if(!deferredInstallPrompt){
+        html += `
+            <div class="app-steps">
+                <h3>${isAndroid ? '🤖 Android' : '💻 Računar'}</h3>
+                <ol>
+                    <li>Otvori meni pregledača <strong>⋮</strong> (gore desno).</li>
+                    <li>Izaberi <strong>„Instaliraj aplikaciju“</strong> ili <strong>„Dodaj na početni ekran“</strong>.</li>
+                    <li>Potvrdi sa <strong>„Instaliraj“</strong> / <strong>„Dodaj“</strong>.</li>
+                </ol>
+                <p style="margin:10px 0 0;font-size:.9em;color:#64748b;">
+                    Najbolje radi u pregledaču Google Chrome.
+                </p>
+            </div>
+        `;
+    }
+
+    area.innerHTML = html;
+
+}
+
+async function installApp(){
+
+    if(!deferredInstallPrompt){
+        renderAppInstall();
+        return;
+    }
+
+    deferredInstallPrompt.prompt();
+
+    try{
+        await deferredInstallPrompt.userChoice;
+    }catch(e){}
+
+    deferredInstallPrompt = null;
+    renderAppInstall();
+
+}
+
+window.addEventListener('beforeinstallprompt', e=>{
+    // Ne prikazuj automatski mali baner pregledača - koristimo naše dugme
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    renderAppInstall();
+});
+
+window.addEventListener('appinstalled', ()=>{
+    deferredInstallPrompt = null;
+    const area = document.getElementById('appInstallArea');
+    if(area){
+        area.innerHTML = `
+            <div class="app-install-status">✅ Aplikacija je instalirana! Pronađi ikonicu FK Sloboda na početnom ekranu.</div>
+        `;
+    }
+});
+
+// U instaliranoj aplikaciji nema potrebe za tabom "Instaliraj aplikaciju"
+if(isAppInstalled()){
+    const btn = document.getElementById('appTabBtn');
+    if(btn){
+        btn.style.display = 'none';
+    }
+}
+
+renderAppInstall();
+
+// Service worker je obavezan da bi pregledač dozvolio instalaciju
+if('serviceWorker' in navigator){
+    window.addEventListener('load', ()=>{
+        navigator.serviceWorker.register('sw.js').catch(()=>{});
+    });
 }
 
 
