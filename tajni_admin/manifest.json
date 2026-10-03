@@ -1,0 +1,13 @@
+{
+  "name": "Sloboda Admin",
+  "short_name": "Sloboda Admin",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#003366",
+  "theme_color": "#003366",
+  "icons": [
+    { "src": "../grb.webp", "sizes": "2300x2300", "type": "image/webp", "purpose": "any" }
+  ]
+}
