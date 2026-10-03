@@ -1,17 +1,4 @@
-/* =========================================================
-   SERVICE WORKER - FK Sloboda aplikacija
-
-   Potreban je da bi telefon dozvolio instalaciju sajta kao
-   aplikacije. Namjerno NE čuva (kešira) podatke o utakmicama,
-   tabeli i vijestima - oni se uvijek povlače svježi sa GitHub-a,
-   da bi rezultati i meč uživo bili tačni. Čuva se samo početna
-   stranica, da bi se aplikacija otvorila i bez interneta (tada
-   sa porukom da nema konekcije umjesto praznog ekrana).
-
-   Kad promijeniš ovaj fajl, povećaj broj u CACHE_NAME.
-========================================================= */
-
-const CACHE_NAME = 'fk-sloboda-v1';
+const CACHE_NAME = 'fk-sloboda-v2';
 
 self.addEventListener('install', event=>{
     event.waitUntil(
@@ -32,12 +19,9 @@ self.addEventListener('activate', event=>{
 });
 
 self.addEventListener('fetch', event=>{
-
     const req = event.request;
-
-    // Samo otvaranje stranice: prvo internet (uvijek najnovija verzija),
-    // a ako nema interneta - sačuvana kopija.
-    if(req.mode === 'navigate'){
+    // Samo stranica za navijače se čuva za rad bez interneta (ne admin)
+    if(req.mode === 'navigate' && !req.url.includes('tajni_admin')){
         event.respondWith(
             fetch(req)
                 .then(res=>{
@@ -48,6 +32,4 @@ self.addEventListener('fetch', event=>{
                 .catch(() => caches.match('./index.html').then(r => r || caches.match('./')))
         );
     }
-
-    // Sve ostalo (slike, GitHub podaci, admin...) ide normalno preko interneta.
 });
