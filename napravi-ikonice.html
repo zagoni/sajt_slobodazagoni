@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Napravi ikonice aplikacije</title>
+<style>
+  body{font-family:Arial,sans-serif;background:#f4f6f9;color:#333;text-align:center;padding:20px;}
+  .box{max-width:520px;margin:0 auto;background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px #0002;}
+  canvas{border:1px solid #ddd;border-radius:12px;margin:8px;max-width:45%;height:auto;}
+  button{background:#004488;color:#fff;border:0;border-radius:8px;padding:12px 18px;font-size:16px;font-weight:bold;cursor:pointer;margin:6px;}
+  label{display:block;margin:12px 0 4px;}
+  p.small{font-size:13px;color:#666;}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2 style="color:#004488;">Ikonice za aplikaciju</h2>
+  <p>Ova stranica od <strong>grb.webp</strong> napravi dvije PNG ikonice potrebne za instalaciju aplikacije.</p>
+
+  <label>Boja pozadine ikonice:
+    <input type="color" id="bg" value="#ffffff">
+  </label>
+
+  <div>
+    <canvas id="c512" width="512" height="512"></canvas>
+    <canvas id="c192" width="192" height="192"></canvas>
+  </div>
+
+  <button onclick="save('c192','icon-192.png')">⬇ Preuzmi icon-192.png</button>
+  <button onclick="save('c512','icon-512.png')">⬇ Preuzmi icon-512.png</button>
+
+  <p class="small">Oba fajla ubaci u GitHub repozitorijum, u isti folder gdje je index.html (pored grb.webp). Poslije toga ovu stranicu možeš obrisati.</p>
+  <p class="small" id="err" style="color:#c00;"></p>
+</div>
+<script>
+  var img = new Image();
+  img.onload = draw;
+  img.onerror = function(){ document.getElementById('err').textContent = 'Nije pronađen grb.webp u istom folderu.'; };
+  img.src = 'grb.webp';
+
+  document.getElementById('bg').addEventListener('input', draw);
+
+  function draw(){
+    if(!img.naturalWidth){ return; }
+    ['c512','c192'].forEach(function(id){
+      var c = document.getElementById(id), ctx = c.getContext('2d'), S = c.width;
+      ctx.fillStyle = document.getElementById('bg').value;
+      ctx.fillRect(0,0,S,S);
+      // grb u sredini, sa ivicom od ~14% (da ga Android ne odsiječe u krugu)
+      var pad = S * 0.14, box = S - 2*pad;
+      var r = Math.min(box / img.naturalWidth, box / img.naturalHeight);
+      var w = img.naturalWidth * r, h = img.naturalHeight * r;
+      ctx.drawImage(img, (S-w)/2, (S-h)/2, w, h);
+    });
+  }
+
+  function save(id, name){
+    var a = document.createElement('a');
+    a.href = document.getElementById(id).toDataURL('image/png');
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+</script>
+</body>
+</html>
