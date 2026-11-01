@@ -1,0 +1,96 @@
+{
+  "starting_lineup": [
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Siniša Đokić"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Rade Stankić"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Radislav Stevanović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 1,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dražen Petrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Đorđe Jović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 1,
+      "red_card": false,
+      "player": "Žarko Rikanović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 1,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dejan Todorović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Darko Maksimović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Miloš Marković"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Nikola Mitrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 2,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Slaviša Stanojević"
+    }
+  ],
+  "substitutes": [],
+  "round": 10,
+  "match_title": "Polet Gornji Kojčinovac",
+  "score": "0:2"
+}
