@@ -1,10 +1,10 @@
 {
-  "played": 8,
-  "won": 1,
+  "played": 10,
+  "won": 2,
   "drawn": 1,
-  "lost": 6,
-  "goals_for": 11,
-  "goals_against": 18,
-  "points": 4,
+  "lost": 7,
+  "goals_for": 15,
+  "goals_against": 21,
+  "points": 7,
   "title": "Sloga Dazdarevo"
 }
