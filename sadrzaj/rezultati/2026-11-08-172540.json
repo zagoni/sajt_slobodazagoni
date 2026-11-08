@@ -1,0 +1,115 @@
+{
+  "starting_lineup": [
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Branko Babalj"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Miloš Marković"
+    },
+    {
+      "minutes": 53,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": true,
+      "player": "Radislav Stevanović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dražen Petrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 1,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Đorđe Jović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Luka Stankić"
+    },
+    {
+      "minutes": 35,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Žarko Rikanović"
+    },
+    {
+      "minutes": 45,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Darko Maksimović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 1,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Dejan Todorović"
+    },
+    {
+      "minutes": 90,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Nikola Mitrović"
+    },
+    {
+      "minutes": 90,
+      "goals": 2,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Slaviša Stanojević"
+    }
+  ],
+  "substitutes": [
+    {
+      "minute_in": 35,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Rajko Đorđić",
+      "subbed_for": "Žarko Rikanović"
+    },
+    {
+      "minute_in": 45,
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_card": false,
+      "player": "Saša Spasojević",
+      "subbed_for": "Darko Maksimović"
+    }
+  ],
+  "match_title": "Sloga 94 Bijeljina",
+  "round": 11,
+  "score": "3:1"
+}
