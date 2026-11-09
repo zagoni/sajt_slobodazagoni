@@ -1,10 +1,10 @@
 {
   "played": 10,
-  "won": 3,
+  "won": 4,
   "drawn": 0,
   "lost": 6,
-  "goals_for": 8,
+  "goals_for": 11,
   "goals_against": 17,
-  "points": 9,
+  "points": 12,
   "title": "Piperci"
 }
