@@ -1,10 +1,10 @@
 {
-  "played": 5,
-  "won": 2,
+  "played": 11,
+  "won": 7,
   "drawn": 3,
-  "lost": 0,
-  "goals_for": 14,
-  "goals_against": 9,
-  "points": 9,
+  "lost": 1,
+  "goals_for": 32,
+  "goals_against": 20,
+  "points": 24,
   "title": "Koviljuše Bijeljina"
 }

@@ -1,10 +1,10 @@
 {
-  "played": 5,
-  "won": 5,
+  "played": 11,
+  "won": 8,
   "drawn": 0,
-  "lost": 0,
-  "goals_for": 17,
-  "goals_against": 4,
-  "points": 15,
+  "lost": 3,
+  "goals_for": 26,
+  "goals_against": 13,
+  "points": 24,
   "title": "Sloboda Donji Zagoni"
 }
